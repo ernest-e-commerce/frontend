@@ -74,13 +74,7 @@ const Cart = () => {
               </div>
 
               <div className="mt-4">
-                {/* ✅ Navigate to Checkout */}
-                <button
-                  onClick={() => navigate("/checkout")}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded font-semibold shadow"
-                >
-                  Checkout
-                </button>
+                <Link to="/checkout" className="block w-full px-4 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded font-semibold shadow text-center hover:shadow-md transition-shadow">Checkout</Link>
               </div>
 
               <div className="text-xs text-gray-500 mt-3">Secure Checkout • Free returns</div>

@@ -36,7 +36,7 @@ const App = () => {
           <Route path="products" element={<AdminProducts />} /> 
           <Route path="orders" element={<AdminOrders />} />
         </Route>
-        {/* =================================================== */}
+        
 
         
         {/* --- 2. CUSTOMER/PUBLIC ROUTES & AUTH ROUTES --- */}
@@ -59,9 +59,11 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           
+          
+          
           {/* Auth Pages */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+
+  <Route path="/register" element={<Register />} />
           
           {/* --- NEW DEDICATED ADMIN LOGIN ROUTE --- */}
           <Route path="/admin-login" element={<AdminLogin />} /> 
