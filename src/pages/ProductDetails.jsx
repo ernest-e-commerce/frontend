@@ -12,16 +12,56 @@ const ProductDetails = () => {
   const product = products.find((p) => String(p.id) === String(id)) || products[0];
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
+  // 1. NEW STATE for toast visibility
+  const [showToast, setShowToast] = useState(false); 
 
   const onAdd = () => {
     addToCart(product, qty);
-    navigate("/cart");
+    
+    // 2. Show the toast when item is added
+    setShowToast(true); 
+    
+    // Hide the toast after 3 seconds (3000 milliseconds)
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000); 
   };
 
   const related = products.filter((p) => p.id !== product.id).slice(0, 4);
 
   return (
     <div className="px-4 md:px-8 lg:px-16 py-8">
+      
+      {/* 3. TOAST NOTIFICATION MARKUP */}
+      {showToast && (
+        <div className="fixed top-20 right-8 z-50 transition-opacity duration-300">
+          <div className="bg-green-600 text-white p-4 rounded-lg shadow-xl flex items-center space-x-3 min-w-[250px] animate-fade-in-down">
+            {/* Optional: Add a simple checkmark icon */}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            
+            <span className="font-semibold">
+              {product.title} Added to Cart!
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Tailwind CSS keyframe for animation (place this in your main CSS file, e.g., index.css) */}
+      {/* @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-down {
+        animation: fade-in-down 0.3s ease-out forwards;
+      }
+      */}
+
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white rounded-lg p-4 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

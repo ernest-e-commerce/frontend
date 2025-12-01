@@ -1,9 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const Cart = () => {
   const { cart, updateQty, removeFromCart, clearCart } = useCart();
+  const navigate = useNavigate(); // ✅ Added navigation
   const total = cart.reduce((acc, c) => acc + (c.price || 0) * (c.qty || 1), 0);
 
   return (
@@ -14,10 +15,13 @@ const Cart = () => {
         {cart.length === 0 ? (
           <div className="bg-white p-8 rounded shadow text-center">
             <p className="mb-4">Your cart is empty.</p>
-            <Link to="/products" className="inline-block px-6 py-3 bg-orange-500 text-white rounded">Shop Products</Link>
+            <Link to="/products" className="inline-block px-6 py-3 bg-orange-500 text-white rounded">
+              Shop Products
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => (
                 <div key={item.id} className="bg-white rounded p-4 flex gap-4 items-center shadow-sm">
@@ -27,23 +31,41 @@ const Cart = () => {
                     <p className="text-gray-500 text-sm">₦{item.price?.toLocaleString()}</p>
 
                     <div className="mt-2 flex items-center gap-2">
-                      <button onClick={() => updateQty(item.id, Math.max(1, (item.qty || 1) - 1))} className="px-3 py-1 border rounded">-</button>
+                      <button
+                        onClick={() => updateQty(item.id, Math.max(1, (item.qty || 1) - 1))}
+                        className="px-3 py-1 border rounded"
+                      >
+                        -
+                      </button>
                       <div className="px-4">{item.qty}</div>
-                      <button onClick={() => updateQty(item.id, (item.qty || 1) + 1)} className="px-3 py-1 border rounded">+</button>
+                      <button
+                        onClick={() => updateQty(item.id, (item.qty || 1) + 1)}
+                        className="px-3 py-1 border rounded"
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="font-bold">₦{((item.price || 0) * (item.qty || 1)).toLocaleString()}</div>
-                    <button onClick={() => removeFromCart(item.id)} className="mt-2 text-red-600 text-sm hover:underline">Remove</button>
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="mt-2 text-red-600 text-sm hover:underline"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
 
+            {/* Order Summary */}
             <aside className="bg-white rounded p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <h4 className="font-semibold text-lg">Order summary</h4>
-                <button onClick={clearCart} className="text-sm text-gray-500 hover:underline">Clear</button>
+                <button onClick={clearCart} className="text-sm text-gray-500 hover:underline">
+                  Clear
+                </button>
               </div>
 
               <div className="flex justify-between mt-4">
@@ -52,7 +74,13 @@ const Cart = () => {
               </div>
 
               <div className="mt-4">
-                <button className="w-full px-4 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded font-semibold shadow">Checkout</button>
+                {/* ✅ Navigate to Checkout */}
+                <button
+                  onClick={() => navigate("/checkout")}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded font-semibold shadow"
+                >
+                  Checkout
+                </button>
               </div>
 
               <div className="text-xs text-gray-500 mt-3">Secure Checkout • Free returns</div>

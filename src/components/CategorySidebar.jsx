@@ -17,7 +17,14 @@ const categories = [
 
 const CategorySidebar = ({ active = "all", onSelect = () => {} }) => {
   return (
-    <aside className="hidden md:block fixed left-0 top-24 h-[calc(100vh-6rem)] w-64 bg-white p-6 rounded-r-lg border-r border-gray-200 shadow-sm overflow-y-auto">
+    <aside
+      className="
+        hidden md:block fixed left-0 top-24 
+        h-[calc(100vh-6rem)] w-64 bg-white 
+        p-6 rounded-r-lg border-r border-gray-200 
+        shadow-sm overflow-y-auto scrollbar-hide
+      "
+    >
       <h4 className="text-xl font-bold mb-6 border-b pb-2">Categories</h4>
 
       <ul className="flex flex-col gap-3">
