@@ -6,6 +6,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminLayout from "./components/AdminLayout"; 
+import AdminAuthWrapper from "./components/AdminAuthWrapper"; // <-- NEW IMPORT for security
 
 // Customer Pages
 import Home from "./pages/Home";
@@ -21,7 +22,7 @@ import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard"; 
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
-import AdminLogin from "./pages/AdminLogin"; // NEW IMPORT
+import AdminLogin from "./pages/AdminLogin"; 
 
 const App = () => {
   return (
@@ -29,24 +30,26 @@ const App = () => {
       <Routes>
         
         {/* =================================================== */}
-        {/* --- 1. ADMIN DASHBOARD ROUTES --- */}
-        {/* These routes use the AdminLayout (Sidebar + Content) */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} /> 
-          <Route path="products" element={<AdminProducts />} /> 
-          <Route path="orders" element={<AdminOrders />} />
+        {/* --- 1. ADMIN DASHBOARD ROUTES (SECURED) --- */}
+        {/* The outer Route uses AdminAuthWrapper to check login status. */}
+        {/* If authenticated, it renders the AdminLayout and its children (dashboard, products, orders). */}
+        <Route path="/admin" element={<AdminAuthWrapper />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} /> 
+            <Route path="products" element={<AdminProducts />} /> 
+            <Route path="orders" element={<AdminOrders />} />
+          </Route>
         </Route>
         
-
+        {/* =================================================== */}
         
         {/* --- 2. CUSTOMER/PUBLIC ROUTES & AUTH ROUTES --- */}
-        {/* These routes use the standard Navbar/Footer Layout */}
         <Route 
           element={
             <>
               <Navbar />
               <main className="flex-1 min-h-screen">
-                <Outlet /> {/* Renders the specific page component */}
+                <Outlet />
               </main>
               <Footer />
             </>
@@ -59,13 +62,11 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           
-          
-          
           {/* Auth Pages */}
-
-  <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
-          {/* --- NEW DEDICATED ADMIN LOGIN ROUTE --- */}
+          {/* DEDICATED ADMIN LOGIN ROUTE */}
           <Route path="/admin-login" element={<AdminLogin />} /> 
           
           {/* 404 CATCH-ALL */}

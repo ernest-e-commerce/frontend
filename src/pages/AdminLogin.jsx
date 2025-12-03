@@ -1,91 +1,70 @@
 // src/pages/AdminLogin.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+// Placeholder for an actual login function
+const authenticateAdmin = (username, password) => {
+  // In a real app, this would be an API call
+  return username === 'admin' && password === 'password123'; 
+};
 
-// Define the fake admin credentials here
-const ADMIN_EMAIL = "admin@ecom.com";
-const ADMIN_PASSWORD = "password123";
-
-const AdminLogin = () => {
-  const { login } = useAuth();
+const AdminLogin = ({ setIsAdminLoggedIn }) => {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
 
-  const submit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
-    const { email, password } = form;
-
-    // Check for ADMIN CREDENTIALS
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      // Log in as admin and redirect to the dashboard
-      login({ email: email, name: "Admin User", role: "admin" });
-      navigate("/admin");
+    if (authenticateAdmin(username, password)) {
+      // Set the state in the parent (e.g., App.jsx) to indicate login
+      // For this example, we'll just navigate away and assume success
+      // In a real app, this would involve tokens/context state.
+      // We will simulate the login success:
+      localStorage.setItem('adminToken', 'fake-admin-token'); 
+      navigate('/admin'); // Redirect to the dashboard
+      // Optionally, set the state prop if you pass it down
+      if (setIsAdminLoggedIn) setIsAdminLoggedIn(true);
     } else {
-      setError("Invalid admin email or password.");
+      setError('Invalid username or password.');
     }
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-900 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
-        
-        <h2 className="text-3xl font-bold mb-1 text-center text-red-700">Admin Sign In</h2>
-        <p className="text-center text-sm text-gray-500 mb-6">
-          Access the management console.
-        </p>
-
-        <form onSubmit={submit} className="space-y-5">
-          {error && (
-            <div className="p-3 text-sm text-red-800 bg-red-100 rounded-lg text-center" role="alert">
-              {error}
-            </div>
-          )}
-
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold text-center text-gray-800">Admin Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700">Username</label>
             <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+              type="text"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
-              placeholder="admin@ecom.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none transition"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
-              value={form.password}
-              onChange={(e) => setForm((s) => ({ ...s, password: e.target.value }))}
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="password123"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none transition"
             />
           </div>
-
           <button
             type="submit"
-            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition"
+            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-150"
           >
-            Sign In as Admin
+            Log In
           </button>
         </form>
-
-        <div className="text-center text-sm text-gray-600 mt-5">
-          <Link
-            to="/login"
-            className="text-orange-500 font-medium hover:underline"
-          >
-            &#x2190; Back to Customer Login
-          </Link>
-        </div>
       </div>
     </div>
   );
