@@ -1,144 +1,200 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const Checkout = () => {
-  const { cart, updateQty, removeFromCart, clearCart } = useCart();
+  const { cart, clearCart } = useCart();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    zip: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: ""
+  });
 
-  const subtotal = cart.reduce(
-    (acc, item) => acc + (item.price || 0) * (item.qty || 1),
-    0
-  );
+  // Calculate the total cost
+  const total = cart.reduce((acc, c) => acc + (c.price || 0) * (c.qty || 1), 0);
+
+  // Example shipping cost and tax (added for realism)
+  const shipping = total > 50000 ? 0 : 5000;
+  const taxRate = 0.05;
+  const tax = total * taxRate;
+  const grandTotal = total + shipping + tax;
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    // Mock checkout
+    alert("Order placed successfully! Thank you for shopping with Earnest Mall.");
+    clearCart();
+    navigate("/");
+  };
+
+  // Empty cart state styling
+  if (cart.length === 0) {
+    return (
+      <div className="px-4 md:px-8 lg:px-16 py-16 bg-gray-50 min-h-[50vh]">
+        <div className="max-w-4xl mx-auto text-center p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+          <p className="text-xl text-gray-700">
+            🛒 Your cart is empty. <a href="/products" className="text-orange-500 font-semibold hover:text-orange-600 transition-colors">Shop now</a>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 py-10 bg-gray-50 min-h-screen">
-      <div className="max-w-6xl mx-auto">
+    <div className="px-4 md:px-8 lg:px-16 py-12 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
 
-        {/* PAGE TITLE */}
-        <h2 className="text-2xl font-bold mb-6">Your Cart</h2>
+        {/* Title: Elegant font-serif and primary text color */}
+        <h2 className="text-4xl font-serif font-bold mb-10 text-gray-800 border-b border-gray-300 pb-4">
+          Secure Checkout
+        </h2>
 
-        {/* EMPTY CART */}
-        {cart.length === 0 ? (
-          <div className="bg-white p-10 rounded-lg shadow text-center">
-            <p className="text-gray-600 text-lg mb-4">
-              Your cart is empty.
-            </p>
-            <Link
-              to="/products"
-              className="px-6 py-3 bg-orange-500 text-white rounded-lg shadow font-semibold"
-            >
-              Shop Products
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-            {/* CART ITEMS */}
-            <div className="lg:col-span-2 space-y-5">
-              {cart.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-24 h-24 object-contain rounded"
-                  />
+          {/* LEFT SIDE: Shipping & Payment (span 2 columns) */}
+          <div className="space-y-8 lg:col-span-2">
 
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-500 text-sm">
-                      ₦{item.price?.toLocaleString()}
-                    </p>
-
-                    {/* QUANTITY CONTROL */}
-                    <div className="mt-3 flex items-center gap-2">
-                      <button
-                        onClick={() =>
-                          updateQty(item.id, Math.max(1, (item.qty || 1) - 1))
-                        }
-                        className="w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-100"
-                      >
-                        -
-                      </button>
-
-                      <span className="px-3 font-semibold">
-                        {item.qty}
-                      </span>
-
-                      <button
-                        onClick={() =>
-                          updateQty(item.id, (item.qty || 1) + 1)
-                        }
-                        className="w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-100"
-                      >
-                        +
-                      </button>
-                    </div>
+            {/* Shipping Information */}
+            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
+                1. Shipping Information
+              </h3>
+              <div className="space-y-4">
+                {/* Input Fields: Styled for Light Theme */}
+                {['name', 'email', 'address', 'city', 'zip'].map((key) => (
+                  <div key={key}>
+                    <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">
+                      {key.replace('zip', 'ZIP Code').replace('cardnumber', 'Card Number')}
+                    </label>
+                    <input
+                      type={key === 'email' ? 'email' : 'text'}
+                      name={key}
+                      required
+                      value={form[key]}
+                      onChange={handleInputChange}
+                      // Input Styling: Light background, dark text, orange focus ring
+                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                    />
                   </div>
-
-                  {/* ITEM TOTAL & REMOVE */}
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-800">
-                      ₦{((item.price || 0) * (item.qty || 1)).toLocaleString()}
-                    </p>
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="mt-2 text-red-600 text-sm hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* ORDER SUMMARY */}
-            <aside className="bg-white rounded-lg p-5 shadow-sm h-fit">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-lg">Order Summary</h4>
-                <button
-                  onClick={clearCart}
-                  className="text-sm text-gray-500 hover:underline"
-                >
-                  Clear Cart
-                </button>
+            {/* Payment Information */}
+            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
+                2. Payment Information
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-gray-700">Card Number</label>
+                  <input
+                    type="text"
+                    name="cardNumber"
+                    required
+                    value={form.cardNumber}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Expiry Date</label>
+                    <input
+                      type="text"
+                      name="expiry"
+                      required
+                      value={form.expiry}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                      placeholder="MM/YY"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">CVV</label>
+                    <input
+                      type="text"
+                      name="cvv"
+                      required
+                      value={form.cvv}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                      placeholder="123"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE: Order Summary (span 1 column) */}
+          <div className="lg:col-span-1">
+            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 h-fit sticky top-20">
+              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
+                3. Order Summary
+              </h3>
+
+              {/* Item List */}
+              <div className="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
+                {cart.map((item) => (
+                  <div key={item.id} className="flex justify-between text-sm text-gray-600">
+                    <span className="truncate pr-2">{item.title} ({item.qty})</span>
+                    <span className="font-medium text-gray-800">₦{((item.price || 0) * (item.qty || 1)).toLocaleString()}</span>
+                  </div>
+                ))}
               </div>
 
-              <div className="flex justify-between text-sm mb-3">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-semibold">
-                  ₦{subtotal.toLocaleString()}
-                </span>
+              {/* Cost Details */}
+              <div className="border-t border-gray-300 pt-4 space-y-2">
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Subtotal:</span>
+                  <span className="font-medium">₦{total.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Shipping:</span>
+                  <span className="font-medium">{shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Tax (5%):</span>
+                  <span className="font-medium">₦{tax.toLocaleString()}</span>
+                </div>
               </div>
 
-              <div className="flex justify-between text-sm mb-3">
-                <span className="text-gray-600">Shipping</span>
-                <span className="text-gray-600">₦0 (Free)</span>
+              {/* Grand Total */}
+              <div className="border-t border-gray-300 mt-4 pt-4">
+                <div className="flex justify-between font-extrabold text-xl text-orange-500">
+                  <span>Grand Total</span>
+                  <span>₦{grandTotal.toLocaleString()}</span>
+                </div>
               </div>
 
-              <hr className="my-3" />
-
-              <div className="flex justify-between text-lg font-bold mb-5">
-                <span>Total</span>
-                <span>₦{subtotal.toLocaleString()}</span>
-              </div>
-
+              {/* Place Order Button */}
               <button
-                className="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-lg font-semibold shadow hover:opacity-95"
+                type="submit" // Associate with the main form
+                className="w-full mt-6 px-4 py-3 bg-orange-500 text-white rounded-lg font-bold shadow-lg hover:bg-orange-600 transition-colors text-lg"
               >
-                Proceed to Checkout
+                Place Order
               </button>
 
-              <p className="text-xs text-gray-500 text-center mt-3">
-                Secure payment • Fast delivery • Free returns
+              {/* Security Message */}
+              <p className="text-center text-xs text-gray-500 mt-3">
+                <span className="text-green-500 mr-1">🔒</span> Payments are secure and encrypted.
               </p>
-            </aside>
+            </div>
           </div>
-        )}
+        </form>
       </div>
     </div>
   );

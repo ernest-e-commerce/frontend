@@ -127,7 +127,7 @@ const ProductDetails = () => {
         </div>
 
         <aside className="hidden lg:block">
-          <div className="bg-white rounded-lg p-4 shadow-sm sticky top-24">
+          <div className="bg-white rounded-lg p-4 shadow-sm sticky top-24 z-[9999]">
             <div className="text-sm text-gray-500 mb-2">Sponsored</div>
             <img src="/images/aside-ad-1.jpg" alt="ad" className="w-full rounded mb-3 object-cover" />
             <p className="text-sm text-gray-700">Recommended for you.</p>

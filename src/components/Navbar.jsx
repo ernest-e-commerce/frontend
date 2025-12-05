@@ -87,7 +87,7 @@ const SearchInputWithSuggestions = ({ placeholder, isMobile = false, closeMobile
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)}
           placeholder={placeholder}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg 
+          className="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg
                      focus:outline-none focus:border-gray-600 transition"
         />
         {!isMobile && (
@@ -134,11 +134,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
 
           {/* BRAND */}
-          <Link
-            to="/"
-            className="text-2xl font-bold tracking-wide text-gray-900 hover:text-gray-700 transition"
-          >
-            MyStore
+          <Link to="/" className="flex items-center">
+            <img src="/logo.jpg" alt="Earnest Mall" className="h-16 w-auto" />
           </Link>
 
           {/* DESKTOP SEARCH */}
@@ -190,12 +187,15 @@ const Navbar = () => {
             {/* AUTH */}
             {user ? (
               <div className="flex items-center gap-3">
-                <span className="hidden sm:block text-gray-700 text-sm font-medium">
+                <Link
+                  to="/profile"
+                  className="hidden sm:block text-gray-700 text-sm font-medium hover:text-black transition"
+                >
                   {user.name || user.email}
-                </span>
+                </Link>
                 <button
                   onClick={logout}
-                  className="px-3 py-1 bg-gray-100 border border-gray-300 
+                  className="px-3 py-1 bg-gray-100 border border-gray-300
                              text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition"
                 >
                   Logout

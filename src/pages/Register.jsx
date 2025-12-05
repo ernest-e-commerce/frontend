@@ -5,11 +5,12 @@ import { useNavigate, Link } from "react-router-dom";
 const Register = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", password: "" });
 
   const submit = (e) => {
     e.preventDefault();
-    login({ name: form.name || form.email.split("@")[0], email: form.email });
+    const fullName = `${form.firstName} ${form.lastName}`.trim();
+    login({ name: fullName || form.email.split("@")[0], email: form.email });
     navigate("/");
   };
 
@@ -23,15 +24,30 @@ const Register = () => {
         <form onSubmit={submit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
+              First Name
             </label>
             <input
-              value={form.name}
+              value={form.firstName}
               onChange={(e) =>
-                setForm((s) => ({ ...s, name: e.target.value }))
+                setForm((s) => ({ ...s, firstName: e.target.value }))
               }
               required
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Last Name
+            </label>
+            <input
+              value={form.lastName}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, lastName: e.target.value }))
+              }
+              required
+              placeholder="Enter your last name"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition"
             />
           </div>

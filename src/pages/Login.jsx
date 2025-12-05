@@ -92,17 +92,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* --- 2. NEW ADMIN QUICK-ACCESS BUTTON --- */}
-        <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
-            <button
-              onClick={quickAdminLogin}
-              className="w-full py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition"
-            >
-              Admin Dashboard
-            </button>
-        </div>
-        {/* ------------------------------------- */}
-
 
         <div className="text-center text-sm text-gray-600 mt-5">
           Don't have an account?{" "}
