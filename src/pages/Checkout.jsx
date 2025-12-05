@@ -5,192 +5,261 @@ import { useCart } from "../context/CartContext";
 const Checkout = () => {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     address: "",
     city: "",
     zip: "",
+    paymentMethod: "instant",
     cardNumber: "",
     expiry: "",
-    cvv: ""
+    cvv: "",
   });
 
-  // Calculate the total cost
-  const total = cart.reduce((acc, c) => acc + (c.price || 0) * (c.qty || 1), 0);
+  // Safely calculate totals with proper number conversion
+  const subtotal = cart.reduce((acc, item) => {
+    const price = parseFloat(item.price) || 0;
+    const qty = parseInt(item.qty, 10) || 1;
+    return acc + price * qty;
+  }, 0);
 
-  // Example shipping cost and tax (added for realism)
-  const shipping = total > 50000 ? 0 : 5000;
-  const taxRate = 0.05;
-  const tax = total * taxRate;
-  const grandTotal = total + shipping + tax;
+  const shipping = subtotal > 50000 ? 0 : 5000;
+  const tax = subtotal * 0.05; // 5% tax
+  const grandTotal = subtotal + shipping + tax;
+
+  // Nigerian Naira formatter (₦12,345)
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
+      .format(amount)
+      .replace("NGN", "₦"); // Replace "NGN" with ₦ symbol
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const submit = (e) => {
-    e.preventDefault();
-    // Mock checkout
+  const handleSubmit = (e) => {
+    // Simple validation
+    if (!form.name || !form.email || !form.address || !form.city || !form.zip) {
+      alert("Please fill in all shipping information.");
+      return;
+    }
+
+    if (form.paymentMethod === "instant") {
+      if (!form.cardNumber || !form.expiry || !form.cvv) {
+        alert("Please complete all payment details.");
+        return;
+      }
+    }
+
+    // Mock successful checkout
     alert("Order placed successfully! Thank you for shopping with Earnest Mall.");
     clearCart();
     navigate("/");
   };
 
-  // Empty cart state styling
+  // Empty cart
   if (cart.length === 0) {
     return (
-      <div className="px-4 md:px-8 lg:px-16 py-16 bg-gray-50 min-h-[50vh]">
-        <div className="max-w-4xl mx-auto text-center p-8 bg-white rounded-xl shadow-lg border border-gray-200">
-          <p className="text-xl text-gray-700">
-            🛒 Your cart is empty. <a href="/products" className="text-orange-500 font-semibold hover:text-orange-600 transition-colors">Shop now</a>
+      <div className="px-4 md:px-8 lg:px-16 py-16 bg-gray-50 min-h-screen">
+        <div className="max-w-4xl mx-auto text-center p-12 bg-white rounded-2xl shadow-xl border border-gray-200">
+          <div className="text-6xl mb-6">Empty Cart</div>
+          <p className="text-xl text-gray-600 mb-8">
+            Your cart is empty. Start shopping to add items!
           </p>
+          <a
+            href="/products"
+            className="inline-block px-8 py-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition shadow-lg"
+          >
+            Continue Shopping
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 py-12 bg-gray-50">
-      <div className="max-w-5xl mx-auto">
-
-        {/* Title: Elegant font-serif and primary text color */}
-        <h2 className="text-4xl font-serif font-bold mb-10 text-gray-800 border-b border-gray-300 pb-4">
+    <div className="px-4 md:px-8 lg:px-16 py-12 bg-gray-50 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-4xl font-serif font-bold text-gray-800 mb-10 text-center lg:text-left border-b border-gray-300 pb-6">
           Secure Checkout
         </h2>
 
-        <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-
-          {/* LEFT SIDE: Shipping & Payment (span 2 columns) */}
-          <div className="space-y-8 lg:col-span-2">
-
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* LEFT: Forms */}
+          <div className="lg:col-span-2 space-y-8">
             {/* Shipping Information */}
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
+            <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+              <h3 className="text-2xl font-bold text-orange-600 mb-6 pb-3 border-b-2 border-orange-200">
                 1. Shipping Information
               </h3>
-              <div className="space-y-4">
-                {/* Input Fields: Styled for Light Theme */}
-                {['name', 'email', 'address', 'city', 'zip'].map((key) => (
-                  <div key={key}>
-                    <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">
-                      {key.replace('zip', 'ZIP Code').replace('cardnumber', 'Card Number')}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {["name", "email", "address", "city", "zip"].map((field) => (
+                  <div key={field} className={field === "address" ? "md:col-span-2" : ""}>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2 capitalize">
+                      {field === "zip" ? "ZIP Code" : field}
                     </label>
                     <input
-                      type={key === 'email' ? 'email' : 'text'}
-                      name={key}
+                      type={field === "email" ? "email" : "text"}
+                      name={field}
                       required
-                      value={form[key]}
+                      value={form[field]}
                       onChange={handleInputChange}
-                      // Input Styling: Light background, dark text, orange focus ring
-                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                      className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-300 focus:border-orange-500 transition-all outline-none"
+                      placeholder={field === "zip" ? "e.g. 100001" : ""}
                     />
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Payment Information */}
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
-                2. Payment Information
+            {/* Payment Method */}
+            <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+              <h3 className="text-2xl font-bold text-orange-600 mb-6 pb-3 border-b-2 border-orange-200">
+                2. Payment Method
               </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">Card Number</label>
+              <div className="space-y-5">
+                <label className="flex items-center p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
                   <input
-                    type="text"
-                    name="cardNumber"
-                    required
-                    value={form.cardNumber}
+                    type="radio"
+                    name="paymentMethod"
+                    value="instant"
+                    checked={form.paymentMethod === "instant"}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
-                    placeholder="1234 5678 9012 3456"
+                    className="w-5 h-5 text-orange-600 focus:ring-orange-500"
                   />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+                  <span className="ml-4 text-lg font-medium text-gray-800">Pay with Card (Instant)</span>
+                </label>
+
+                <label className="flex items-center p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="delivery"
+                    checked={form.paymentMethod === "delivery"}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 text-orange-600 focus:ring-orange-500"
+                  />
+                  <span className="ml-4 text-lg font-medium text-gray-800">Pay on Delivery</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Card Details - Only if instant payment */}
+            {form.paymentMethod === "instant" && (
+              <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                <h3 className="text-2xl font-bold text-orange-600 mb-6 pb-3 border-b-2 border-orange-200">
+                  3. Card Information
+                </h3>
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">Expiry Date</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Card Number</label>
                     <input
                       type="text"
-                      name="expiry"
+                      name="cardNumber"
                       required
-                      value={form.expiry}
+                      value={form.cardNumber}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
-                      placeholder="MM/YY"
+                      placeholder="1234 5678 9012 3456"
+                      maxLength="19"
+                      className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-300 focus:border-orange-500 transition-all"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">CVV</label>
-                    <input
-                      type="text"
-                      name="cvv"
-                      required
-                      value={form.cvv}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
-                      placeholder="123"
-                    />
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Expiry Date</label>
+                      <input
+                        type="text"
+                        name="expiry"
+                        required
+                        value={form.expiry}
+                        onChange={handleInputChange}
+                        placeholder="MM/YY"
+                        maxLength="5"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-300 focus:border-orange-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">CVV</label>
+                      <input
+                        type="text"
+                        name="cvv"
+                        required
+                        value={form.cvv}
+                        onChange={handleInputChange}
+                        placeholder="123"
+                        maxLength="4"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-300 focus:border-orange-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* RIGHT SIDE: Order Summary (span 1 column) */}
+          {/* RIGHT: Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 h-fit sticky top-20">
-              <h3 className="text-xl font-semibold mb-6 text-orange-500 border-b border-gray-300 pb-2">
-                3. Order Summary
+            <div className="bg-white p-8 rounded-2xl shadow-2xl border border-gray-200 sticky top-24">
+              <h3 className="text-2xl font-bold text-orange-600 mb-6 pb-3 border-b-2 border-orange-200">
+                4. Order Summary
               </h3>
 
-              {/* Item List */}
-              <div className="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
+              <div className="max-h-64 overflow-y-auto pr-2 space-y-4 mb-6">
                 {cart.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm text-gray-600">
-                    <span className="truncate pr-2">{item.title} ({item.qty})</span>
-                    <span className="font-medium text-gray-800">₦{((item.price || 0) * (item.qty || 1)).toLocaleString()}</span>
+                  <div key={item.id} className="flex justify-between text-gray-700">
+                    <span className="text-sm font-medium truncate pr-3">
+                      {item.title} × {item.qty || 1}
+                    </span>
+                    <span className="font-bold text-gray-900">
+                      {formatCurrency((parseFloat(item.price) || 0) * (item.qty || 1))}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              {/* Cost Details */}
-              <div className="border-t border-gray-300 pt-4 space-y-2">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Subtotal:</span>
-                  <span className="font-medium">₦{total.toLocaleString()}</span>
+              <div className="border-t-2 border-dashed border-gray-200 rounded-xl p-5 space-y-3">
+                <div className="flex justify-between text-lg">
+                  <span>Subtotal</span>
+                  <span className="font-bold">{formatCurrency(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Shipping:</span>
-                  <span className="font-medium">{shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`}</span>
+                <div className="flex justify-between text-lg">
+                  <span>Shipping</span>
+                  <span className="font-bold text-green-600">
+                    {shipping === 0 ? "FREE" : formatCurrency(shipping)}
+                  </span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Tax (5%):</span>
-                  <span className="font-medium">₦{tax.toLocaleString()}</span>
-                </div>
-              </div>
-
-              {/* Grand Total */}
-              <div className="border-t border-gray-300 mt-4 pt-4">
-                <div className="flex justify-between font-extrabold text-xl text-orange-500">
-                  <span>Grand Total</span>
-                  <span>₦{grandTotal.toLocaleString()}</span>
+                <div className="flex justify-between text-lg">
+                  <span>Tax (5%)</span>
+                  <span className="font-bold">{formatCurrency(tax)}</span>
                 </div>
               </div>
 
-              {/* Place Order Button */}
+              <div className="mt-6 pt-6 border-t-4 border-orange-500">
+                <div className="flex justify-between text-2xl font-extrabold text-orange-600">
+                  <span>Total</span>
+                  <span>{formatCurrency(grandTotal)}</span>
+                </div>
+              </div>
+
               <button
-                type="submit" // Associate with the main form
-                className="w-full mt-6 px-4 py-3 bg-orange-500 text-white rounded-lg font-bold shadow-lg hover:bg-orange-600 transition-colors text-lg"
+                type="submit"
+                className="w-full mt-8 py-5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-xl rounded-xl shadow-2xl hover:from-orange-600 hover:to-red-600 transform hover:scale-105 transition-all duration-300"
               >
-                Place Order
+                Place Order Now
               </button>
 
-              {/* Security Message */}
-              <p className="text-center text-xs text-gray-500 mt-3">
-                <span className="text-green-500 mr-1">🔒</span> Payments are secure and encrypted.
+              <p className="text-center text-sm text-gray-500 mt-6 flex items-center justify-center">
+                <span className="text-green-600 text-xl mr-2">Secure Lock</span>
+                Your payment is safe and encrypted
               </p>
             </div>
           </div>
