@@ -106,7 +106,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <button onClick={onAdd} className="flex-1 py-3 rounded-lg bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold shadow hover:shadow-md transform hover:scale-[1.01]">Add to Cart</button>
+                  <button onClick={onAdd} className="flex-1 py-3 rounded-lg bg-linear-to-r from-orange-400 to-orange-500 text-white font-semibold shadow hover:shadow-md transform hover:scale-[1.01]">Add to Cart</button>
                   <button onClick={() => navigate("/cart")} className="flex-1 py-3 rounded-lg border border-gray-200 text-gray-700">View Cart</button>
                 </div>
 

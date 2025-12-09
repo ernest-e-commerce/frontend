@@ -135,7 +135,7 @@ const Navbar = () => {
 
           {/* BRAND */}
           <Link to="/" className="flex items-center">
-            <img src="/logo.jpg" alt="Earnest Mall" className="h-16 w-auto" />
+            <img src="/logo.jpg" alt="Earnest Mall" className="h-12 w-auto" />
           </Link>
 
           {/* DESKTOP SEARCH */}

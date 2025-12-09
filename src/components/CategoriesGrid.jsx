@@ -2,17 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const categories = [
-  { name: "Shoes", slug: "shoes", icon: "👟" },
-  { name: "Apparel", slug: "apparel", icon: "👕" },
-  { name: "Electronics", slug: "electronics", icon: "📱" },
-  { name: "Audio", slug: "audio", icon: "🎧" },
-  { name: "Accessories", slug: "accessories", icon: "👜" },
-  { name: "Bags", slug: "bags", icon: "🛍️" },
-  { name: "Speakers", slug: "speakers", icon: "🔊" },
-  { name: "Wearables", slug: "wearables", icon: "⌚" },
-  { name: "Grooming", slug: "grooming", icon: "✂️" },
-  { name: "Kids", slug: "kids", icon: "🧸" },
-  { name: "Phones", slug: "phones", icon: "📞" },
+  { name: 'Electronics', slug: 'electronics', icon: '📱' },
+  { name: 'Clothing', slug: 'clothing', icon: '👕' },
+  { name: 'Home & Kitchen', slug: 'home-kitchen', icon: '🏠' },
+  { name: 'Books', slug: 'books', icon: '📚' },
+  { name: "Sports & Outdoors", slug: "sports-outdoors", icon: "⚽" },
+  { name: 'Health & Beauty', slug: 'health-beauty', icon: '💅' },
+  { name: 'Toys & Games', slug: 'toys-games', icon: '🎮' },
+  // { name: 'Automotive', slug: 'automotive', icon: '🚗' },
+  { name: 'Jewelry & Watches', slug: 'jewelry-watches', icon: '💍' },
+  { name: 'Groceries', slug: 'groceries', icon: '🛒' },
+  { name: 'Pet Supplies', slug: 'pet-supplies', icon: '🐾' },
+  { name: 'Office Products', slug: 'office-products', icon: '📎' },
+  { name: 'Musical Instruments', slug: 'musical-instruments', icon: '🎸' },
+  // { name: 'Handmade', slug: 'handmade', icon: '🎨' }
 ];
 
 const CategoriesGrid = () => {

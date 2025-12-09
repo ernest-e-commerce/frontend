@@ -8,11 +8,6 @@ import { useAuth } from '../context/AuthContext'; // Assuming you have useAuth f
 const AdminLayout = () => {
   const { user } = useAuth();
 
-  // Simple Protection: Redirects non-admin users away from the dashboard
-  if (!user || user.role !== 'admin') {
-    return <Navigate to="/admin-login" replace />;
-  }
-
   return (
     <div className="flex h-screen bg-gray-100">
       
