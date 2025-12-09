@@ -1,14 +1,11 @@
 import React from "react";
-// Import Outlet for nested routing
-import { Routes, Route, Outlet } from "react-router-dom"; 
+import { Routes, Route, Outlet } from "react-router-dom";
 
-// Standard Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AdminLayout from "./components/AdminLayout"; 
-import AdminAuthWrapper from "./components/AdminAuthWrapper"; // <-- NEW IMPORT for security
+import AdminLayout from "./components/AdminLayout";
+import AdminAuthWrapper from "./components/AdminAuthWrapper";
 
-// Customer Pages
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
@@ -16,35 +13,30 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile"; // ✅ NEW IMPORT
 import NotFound from "./pages/NotFound";
 
-// Admin Pages
-import AdminDashboard from "./pages/AdminDashboard"; 
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
-import AdminLogin from "./pages/AdminLogin"; 
+import AdminLogin from "./pages/AdminLogin";
 
 const App = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Routes>
-        
-        {/* =================================================== */}
-        {/* --- 1. ADMIN DASHBOARD ROUTES (SECURED) --- */}
-        {/* The outer Route uses AdminAuthWrapper to check login status. */}
-        {/* If authenticated, it renders the AdminLayout and its children (dashboard, products, orders). */}
+
+        {/* ================= ADMIN ROUTES ================= */}
         <Route path="/admin" element={<AdminAuthWrapper />}>
           <Route element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} /> 
-            <Route path="products" element={<AdminProducts />} /> 
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
             <Route path="orders" element={<AdminOrders />} />
           </Route>
         </Route>
-        
-        {/* =================================================== */}
-        
-        {/* --- 2. CUSTOMER/PUBLIC ROUTES & AUTH ROUTES --- */}
-        <Route 
+
+        {/* ================= PUBLIC ROUTES ================= */}
+        <Route
           element={
             <>
               <Navbar />
@@ -53,26 +45,26 @@ const App = () => {
               </main>
               <Footer />
             </>
-          } 
+          }
         >
-          {/* Public Pages */}
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          
-          {/* Auth Pages */}
+
+          {/* AUTH & PROFILE */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
-          {/* DEDICATED ADMIN LOGIN ROUTE */}
-          <Route path="/admin-login" element={<AdminLogin />} /> 
-          
-          {/* 404 CATCH-ALL */}
+          <Route path="/profile" element={<Profile />} /> {/* ✅ NEW ROUTE */}
+
+          {/* ADMIN LOGIN */}
+          <Route path="/admin-login" element={<AdminLogin />} />
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Route>
-        
+
       </Routes>
     </div>
   );
