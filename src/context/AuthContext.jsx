@@ -58,12 +58,13 @@ export const AuthProvider = ({ children }) => {
     if (!type) {
       setIsAdmin(true);
       setCookie("adminToken", token);
+      removeCookie("token");
     } else {
       setCookie("token", token);
+      removeCookie("adminToken");
       setIsAdmin(false);
     }
   };
-
   const logout = () => {
     removeCookie("token");
     removeCookie("adminToken");

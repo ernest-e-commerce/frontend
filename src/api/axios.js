@@ -28,7 +28,7 @@ api.interceptors.request.use(
     const token = getCookie("token");
     const adminToken = getCookie("adminToken");
     if (token || adminToken) {
-      config.headers.Authorization = `Bearer ${token||adminToken}`;
+      config.headers.Authorization = `Bearer ${adminToken || token}`;
     }
     return config;
   },
