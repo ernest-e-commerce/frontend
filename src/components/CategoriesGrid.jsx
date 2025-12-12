@@ -1,24 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-const categories = [
-  { name: 'Electronics', slug: 'electronics', icon: '📱' },
-  { name: 'Clothing', slug: 'clothing', icon: '👕' },
-  { name: 'Home & Kitchen', slug: 'home-kitchen', icon: '🏠' },
-  { name: 'Books', slug: 'books', icon: '📚' },
-  { name: "Sports & Outdoors", slug: "sports-outdoors", icon: "⚽" },
-  { name: 'Health & Beauty', slug: 'health-beauty', icon: '💅' },
-  { name: 'Toys & Games', slug: 'toys-games', icon: '🎮' },
-  // { name: 'Automotive', slug: 'automotive', icon: '🚗' },
-  { name: 'Jewelry & Watches', slug: 'jewelry-watches', icon: '💍' },
-  { name: 'Groceries', slug: 'groceries', icon: '🛒' },
-  { name: 'Pet Supplies', slug: 'pet-supplies', icon: '🐾' },
-  { name: 'Office Products', slug: 'office-products', icon: '📎' },
-  { name: 'Musical Instruments', slug: 'musical-instruments', icon: '🎸' },
-  // { name: 'Handmade', slug: 'handmade', icon: '🎨' }
-];
+import { useCart } from "../context/CartContext";
 
 const CategoriesGrid = () => {
+  const { categories } = useCart();
   return (
     <section className="py-8">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">

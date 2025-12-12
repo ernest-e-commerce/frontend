@@ -1,21 +1,14 @@
 import React from "react";
-
-const categories = [
-  { id: "all", name: "All" },
-  { id: "shoes", name: "Shoes" },
-  { id: "speakers", name: "Speakers" },
-  { id: "apparel", name: "Apparel" },
-  { id: "electronics", name: "Electronics" },
-  { id: "watches", name: "Watches" },
-  { id: "bags", name: "Bags" },
-  { id: "gaming", name: "Gaming" },
-  { id: "laptops", name: "Laptops" },
-  { id: "phones", name: "Phones" },
-  { id: "accessories", name: "Accessories" },
-  { id: "home", name: "Home Appliances" },
-];
+import { useCart } from "../context/CartContext";
 
 const CategorySidebar = ({ active = "all", onSelect = () => {} }) => {
+  const { categories: productCategories } = useCart();
+
+  const categories = [
+    { id: "all", name: "All" },
+    ...productCategories.map((c) => ({ id: c.slug, name: c.name })),
+  ];
+
   return (
     <aside
       className="

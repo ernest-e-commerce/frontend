@@ -19,7 +19,6 @@ const AdminLogin = () => {
 
     try {
       const data = await api.post('/admin/login', { email, password });
-      console.log(data.token)
       login({ name: email, isAdmin: true }, data.token);
       setCookie("adminToken", data.token);
       navigate('/admin');

@@ -13,7 +13,6 @@ const DealsSection = () => {
       try {
         setLoading(true);
         const response = await api.get("/products/hot-deals");
-        console.log("Hot Deals Response:", response);
         setDeals(response || []);
         setError(null);
       } catch (err) {

@@ -11,7 +11,7 @@ export const backendUrl = () => {
     (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
   
   const _api = isLocalhost ? localhostUrl : remoteUrl;
-  return remoteUrl;
+  return _api;
 };
 
 const api = axios.create({
@@ -26,8 +26,9 @@ api.interceptors.request.use(
   (config) => {
     // Do Add auth token
     const token = getCookie("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const adminToken = getCookie("adminToken");
+    if (token || adminToken) {
+      config.headers.Authorization = `Bearer ${token||adminToken}`;
     }
     return config;
   },

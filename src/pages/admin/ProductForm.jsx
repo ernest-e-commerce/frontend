@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import { X, Eye, Maximize2, Loader2 } from 'lucide-react';
 import Modal from '../../components/Modal';
 import api from '../../api/axios';
-
-const PRODUCT_CATEGORIES = [
-    'Electronics', 'Clothing', 'Home & Kitchen', 'Books', 'Sports & Outdoors',
-    'Health & Beauty', 'Toys & Games', 'Automotive', 'Jewelry & Watches',
-    'Groceries', 'Pet Supplies', 'Office Products', 'Musical Instruments', 'Handmade'
-];
+import { useCart } from '../../context/CartContext';
+import { toast } from 'sonner';
 
 const ProductForm = ({ product, onSave, onCancel }) => {
+  const { categories: PRODUCT_CATEGORIES } = useCart();
   const [productData, setProductData] = useState(
     product
       ? {
           ...product,
-          categories: product.categories?.[0] || PRODUCT_CATEGORIES[0],
+          categories: product.categories?.[0] || (PRODUCT_CATEGORIES[0]?.name || ''),
           media: Array.isArray(product.media) ? product.media.map(m => m.url) : [],
           hotDeal: product.hotDeal || false,
         }
@@ -22,7 +19,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
           name: '',
           price: 0,
           availableQuantity: 0,
-          categories: PRODUCT_CATEGORIES[0],
+          categories: PRODUCT_CATEGORIES[0]?.name || '',
           shortDescription: '',
           fullDescription: '',
           media: [], // Will hold File objects or existing URL strings
@@ -115,7 +112,8 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       // Pass back server response (product) to parent onSave
       onSave(responseData);
     } catch (error) {
-      console.error('Failed to save product:', error);
+      const errorMessage = error.response?.data?.message || error.message;
+      toast.error(errorMessage);
     }
     finally {
       setIsSubmitting(false);
@@ -151,7 +149,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
           required
         >
           {PRODUCT_CATEGORIES.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat.slug} value={cat.name}>{cat.name}</option>
           ))}
         </select>
       </div>

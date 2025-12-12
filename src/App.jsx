@@ -24,12 +24,15 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
 import AdminLogin from "./pages/AdminLogin"; 
+import AdminUsers from "./pages/AdminUsers"; 
+import { Toaster } from "sonner";
 
 const App = () => {
   const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Toaster richColors position="buttom-right" expand={true} />
       <Routes>
         
         {/* =================================================== */}
@@ -41,6 +44,7 @@ const App = () => {
             <Route index element={<AdminDashboard />} /> 
             <Route path="products" element={<AdminProducts />} /> 
             <Route path="orders" element={<AdminOrders />} />
+            <Route path="users" element={<AdminUsers />} />
           </Route>
         </Route>
         

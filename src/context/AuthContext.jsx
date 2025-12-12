@@ -1,54 +1,79 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCookie, setCookie, removeCookie } from "../api/cookies";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = getCookie("token");
-    const storedUser = getCookie("user");
-    if (token && storedUser) {
+    const adminToken = getCookie("adminToken");
+
+    const verifyUser = async () => {
       try {
-        const userData = JSON.parse(storedUser);
+        const response = await api.get("/auth/user");
+        const userData = response.user;
         setUser(userData);
         if (userData.isAdmin) {
           setIsAdmin(true);
         }
-      } catch (e) {
-        console.error("Failed to parse user data from cookie", e);
-        setUser(null);
-        setIsAdmin(false);
+      } catch (error) {
+        setUser(null)
+        console.error("Failed to verify user, logging out.", error);
+      } finally {
+        setLoading(false);
       }
+    };
+
+    const verifyAdmin = async () => {
+      try {
+        const response = await api.get("/admin/admin");
+        const adminData = response.admin;
+        setUser(adminData);
+        setIsAdmin(true);
+      } catch (error) {
+        setUser(null)
+         setIsAdmin(false);
+        console.error("Failed to verify admin, logging out.", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (adminToken) {
+      verifyAdmin();
+    } else if (token) {
+      verifyUser();
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  const login = (userData, token) => {
-    setCookie("token", token);
-    setCookie("user", JSON.stringify(userData));
+  const login = (userData, token, type = undefined) => {
     setUser(userData);
-    if (userData.isAdmin) {
+    if (!type) {
       setIsAdmin(true);
       setCookie("adminToken", token);
     } else {
+      setCookie("token", token);
       setIsAdmin(false);
-      removeCookie("adminToken");
     }
   };
 
   const logout = () => {
     removeCookie("token");
-    removeCookie("user");
     removeCookie("adminToken");
     setUser(null);
     setIsAdmin(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAdmin, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, isAdmin, login, logout, loading, setUser }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
