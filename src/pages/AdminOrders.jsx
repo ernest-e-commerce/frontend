@@ -129,7 +129,7 @@ const OrderDetailModal = ({ orderId, onClose }) => {
                                         <select
                                             value={newStatus}
                                             onChange={(e) => setNewStatus(e.target.value)}
-                                            className="flex-grow p-2 border rounded-md bg-white"
+                                            className="grow p-2 border rounded-md bg-white"
                                             disabled={updatingStatus}
                                         >
                                             {['Pending Payment', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(s => (
@@ -154,7 +154,7 @@ const OrderDetailModal = ({ orderId, onClose }) => {
                                     {order.items.map(item => (
                                         <div key={item.productId._id} className="flex items-center p-4 gap-4">
                                             <img src={item.productId.media[0]?.url || '/placeholder.png'} alt={item.name} className="w-20 h-20 object-cover rounded-md bg-gray-100"/>
-                                            <div className="flex-grow">
+                                            <div className="grow">
                                                 <p className="font-semibold text-gray-800">{item.name}</p>
                                                 <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                                             </div>
