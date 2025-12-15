@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // Import Outlet for nested routing
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
+import Preloader from "./components/Preloader";
 
 // Standard Components
 import Navbar from "./components/Navbar";
@@ -29,10 +30,24 @@ import { Toaster } from "sonner";
 
 const App = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Toaster richColors position="buttom-right" expand={true} />
+      <Toaster richColors position="bottom-right" expand={true} />
       <Routes>
         
         {/* =================================================== */}

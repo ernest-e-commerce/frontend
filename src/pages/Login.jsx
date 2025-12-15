@@ -4,19 +4,18 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../api/axios";
+import { toast } from "sonner";
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const from = location.state?.from || "/";
 
   const submit = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     const { email, password } = form;
@@ -24,10 +23,10 @@ const Login = () => {
       const response = await api.post("/auth/login", { email, password });
       const { token, user } = response;
       login(user, token, "user");
+      toast.success("Logged in successfully!");
       navigate(from, { replace: true });
     } catch (err) {
-      const message = err?.message || "Invalid email or password. Please try again.";
-      setError(message);
+      // Error toast is handled by axios interceptor
       console.error(err);
     } finally {
       setLoading(false);
@@ -43,13 +42,6 @@ const Login = () => {
         </p>
 
         <form onSubmit={submit} className="space-y-5">
-          {/* Error Message */}
-          {error && (
-            <div className="p-3 text-sm text-red-800 bg-red-100 rounded-lg text-center" role="alert">
-              {error}
-            </div>
-          )}
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input

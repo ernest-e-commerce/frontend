@@ -3,24 +3,24 @@ import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import api from "../api/axios";
 import { User, ShoppingBag, LogOut } from 'lucide-react';
+import { toast } from "sonner";
 
 const Profile = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'orders'
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (activeTab === 'orders') {
       const fetchOrders = async () => {
         setLoading(true);
-        setError(null);
         try {
           const response = await api.get('/order');
           setOrders(response);
         } catch (err) {
-          setError(err.message || "Failed to fetch orders.");
+          // Error handled by axios
+          console.error(err);
         } finally {
           setLoading(false);
         }
@@ -107,8 +107,7 @@ const Profile = () => {
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <h2 className="text-3xl font-bold mb-8 text-gray-800">My Orders</h2>
                 {loading && <p>Loading orders...</p>}
-                {error && <p className="text-red-500">{error}</p>}
-                {!loading && !error && (
+                {!loading && (
                   <div className="space-y-6">
                     {orders.length > 0 ? (
                       orders.map(order => (

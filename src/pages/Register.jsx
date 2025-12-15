@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import { toast } from "sonner";
 
-const OtpModal = ({ isOpen, onClose, onSubmit, email, loading, error }) => {
+const OtpModal = ({ isOpen, onClose, onSubmit, email, loading }) => {
   const [otp, setOtp] = useState("");
 
   if (!isOpen) return null;
@@ -21,11 +22,6 @@ const OtpModal = ({ isOpen, onClose, onSubmit, email, loading, error }) => {
           An OTP has been sent to <strong>{email}</strong>. Please enter it below.
         </p>
         <form onSubmit={handleSubmit}>
-          {error && (
-            <div className="p-3 mb-4 text-sm text-red-800 bg-red-100 rounded-lg text-center" role="alert">
-              {error}
-            </div>
-          )}
           <div className="mb-6">
             <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-2">
               6-Digit OTP
@@ -68,15 +64,12 @@ const Register = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOtpModalOpen, setOtpModalOpen] = useState(false);
-  const [otpError, setOtpError] = useState("");
 
 
   const submit = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
     try {
       await api.post("/auth/signup", {
@@ -85,18 +78,17 @@ const Register = () => {
         email: form.email,
         password: form.password,
       });
+      toast.success("Account created successfully! Please verify your email.");
       setOtpModalOpen(true);
     } catch (err) {
-      const message = err?.error || "Registration failed. Please try again.";
-      setError(message);
-       console.log(message)
+      // Error toast handled by axios
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleOtpSubmit = async (otp) => {
-    setOtpError("");
     setLoading(true);
     try {
       const response = await api.post("/auth/verify-signup-otp", {
@@ -105,11 +97,11 @@ const Register = () => {
       });
       const { token, user } = response;
       login(user, token, "user");
+      toast.success("Account verified successfully!");
       navigate("/");
     } catch (err) {
-      const message = err?.error || "OTP verification failed.";
-      setOtpError(message);
-      console.log(message)
+      // Error toast handled by axios
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -123,7 +115,6 @@ const Register = () => {
         onSubmit={handleOtpSubmit}
         email={form.email}
         loading={loading}
-        error={otpError}
       />
       <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
         <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-lg">
@@ -132,13 +123,6 @@ const Register = () => {
           </h2>
 
           <form onSubmit={submit} className="space-y-5">
-            {/* Error Message */}
-            {error && (
-              <div className="p-3 text-sm text-red-800 bg-red-100 rounded-lg text-center" role="alert">
-                {error}
-              </div>
-            )}
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 First Name

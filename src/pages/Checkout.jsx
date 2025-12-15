@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { CheckCircle, Landmark, Truck, Lock, Copy, PartyPopper } from "lucide-react";
 import api  from "../api/axios";
+import { toast } from "sonner";
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -16,7 +17,6 @@ const Checkout = () => {
   const [paymentStatus, setPaymentStatus] = useState("pending"); // 'pending', 'awaiting_confirmation'
   const [paymentMethod, setPaymentMethod] = useState("bank_transfer"); // 'bank_transfer', 'pay_on_delivery'
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({
@@ -58,19 +58,20 @@ const Checkout = () => {
   const handleAddressSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.address || !form.city || !form.state || !form.zip) {
-      alert("Please fill in all shipping information.");
+      toast.error("Please fill in all shipping information.");
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       const { name, ...addressData } = form;
       const response = await api.put("/auth/user/address", addressData);
       setUser(response.user);
       setAddressComplete(true);
       setActiveStep("payment");
+      toast.success("Address updated successfully!");
     } catch (err) {
-      setError(err.message || "An error occurred while updating the address.");
+      // Error handled by axios
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -95,7 +96,6 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     setLoading(true);
-    setError(null);
     try {
       const orderData = {
         cart,
@@ -107,11 +107,11 @@ const Checkout = () => {
 
       clearCart();
       setOrderSuccess(true);
+      toast.success("Order placed successfully!");
 
     } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || "An error occurred while placing the order.";
-      setError(errorMessage);
-      alert(errorMessage);
+      // Error handled by axios
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -165,7 +165,6 @@ const Checkout = () => {
               </div>
               {activeStep === "address" && (
                 <form onSubmit={handleAddressSubmit} className="p-6 bg-gray-50 border-t border-gray-200">
-                  {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
