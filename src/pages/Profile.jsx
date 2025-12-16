@@ -38,47 +38,45 @@ const Profile = () => {
 
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 py-10 bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Sidebar */}
-          <div className="md:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl font-bold">
-                  {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">{user.firstName} {user.lastName}</h3>
-                  <p className="text-sm text-gray-500">{user.email}</p>
-                </div>
-              </div>
-              <nav className="space-y-2">
-                <button
-                  onClick={() => setActiveTab('profile')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left font-semibold transition ${activeTab === 'profile' ? 'bg-orange-500 text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}
-                >
-                  <User size={20} />
-                  <span>My Profile</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('orders')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left font-semibold transition ${activeTab === 'orders' ? 'bg-orange-500 text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}
-                >
-                  <ShoppingBag size={20} />
-                  <span>My Orders</span>
-                </button>
-                <button
-                  onClick={logout}
-                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left font-semibold text-red-500 hover:bg-red-50 transition"
-                >
-                  <LogOut size={20} />
-                  <span>Logout</span>
-                </button>
-              </nav>
+    <div className="px-4 md:px-8 lg:px-16 py-10 bg-gray-50 min-h-screen">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">My Profile</h2>
+
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Name
+              </label>
+              <p className="text-lg text-gray-900">{user.name}</p>
             </div>
           </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <p className="text-lg text-gray-900">{user.email}</p>
+            </div>
+
+            {/* CHANGE PASSWORD LINK */}
+            <div className="pt-4">
+              <Link
+                to="/change-password"
+                className="text-orange-500 font-medium hover:underline"
+              >
+                Change Password
+              </Link>
+            </div>
+
+            <div className="pt-6 border-t border-gray-200">
+              <button
+                onClick={logout}
+                className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold shadow hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
           {/* Content */}
           <div className="md:col-span-3">
             {activeTab === 'profile' && (

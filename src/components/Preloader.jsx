@@ -39,7 +39,7 @@ const ProfessionalPreloader = ({ onLoaded }) => {
         {/* 2. Logo - Minimalist Focus */}
         <div className="relative w-20 h-20">
           {/* Subtle Outer Ring (The Spinner) */}
-          <div className="absolute inset-0 border-4 border-t-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-0 border-4 border-t-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
           
           {/* Logo Image */}
           <img
@@ -55,16 +55,16 @@ const ProfessionalPreloader = ({ onLoaded }) => {
             <p className="text-lg font-semibold text-gray-700">Loading Store</p>
             {/* Simple dot animation for flair */}
             <div className="flex space-x-1">
-                <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0s' }}></span>
-                <span className="w-1 h-1 bg-orange-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></span>
-                <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></span>
+                <span className="w-1 h-1 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0s' }}></span>
+                <span className="w-1 h-1 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></span>
+                <span className="w-1 h-1 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></span>
             </div>
         </div>
 
         {/* Optional: Simple Bottom Bar */}
         <div className="w-48 mt-4 bg-gray-200 rounded-full h-1">
             {/* Indeterminate Shimmer effect is better than faked percentage */}
-            <div className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full animate-shimmer"></div>
+            <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full animate-shimmer"></div>
         </div>
       </div>
     </div>

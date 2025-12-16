@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 /* ============================================
-   SEARCH INPUT WITH SUGGESTIONS
+   SEARCH WITH SUGGESTIONS
 ============================================ */
 const SearchInputWithSuggestions = ({
   placeholder,
@@ -39,11 +39,12 @@ const SearchInputWithSuggestions = ({
   const handleSearchSubmit = useCallback(
     (e, finalQuery) => {
       e?.preventDefault();
+
       const search = finalQuery?.trim() || query.trim();
       if (search) {
         navigate(`/products?q=${search}`);
       } else {
-        navigate(`/products`);
+        navigate("/products");
       }
       setQuery("");
       setIsFocused(false);
@@ -76,8 +77,9 @@ const SearchInputWithSuggestions = ({
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              className="p-3 text-sm text-gray-800 hover:bg-blue-50 cursor-pointer transition"
               onClick={() => handleSearchSubmit(null, suggestion)}
+              className="p-3 text-sm text-gray-800 
+                         hover:bg-gray-100 cursor-pointer transition"
             >
               {suggestion}
             </div>
@@ -91,6 +93,7 @@ const SearchInputWithSuggestions = ({
 /* ============================================
    NAVBAR
 ============================================ */
+
 const Navbar = () => {
   const { cart } = useCart();
   const { user, logout, isAdmin } = useAuth();
@@ -99,7 +102,10 @@ const Navbar = () => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
 
-  const closeMobileSearch = useCallback(() => setIsMobileSearchOpen(false), []);
+  const closeMobileSearch = useCallback(
+    () => setIsMobileSearchOpen(false),
+    []
+  );
 
   const handleLogout = () => {
     logout();
