@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductSlider from "../components/ProductSlider";
 import CategoriesGrid from "../components/CategoriesGrid";
 import DealsSection from "../components/DealsSection";
-import products from "../data/Products";
 import ProductCard from "../components/ProductCard";
+import { useCart } from "../context/CartContext";
 
 const Home = () => {
-  const featured = products.slice(0, 4);
+  const { products: productData } = useCart();
+  const [featured, setFeatured] = useState([]);
+
+  useEffect(() => {
+    if (productData && productData.products && productData.products.length > 0) {
+      const shuffled = [...productData.products].sort(() => 0.5 - Math.random());
+      setFeatured(shuffled.slice(0, 10));
+    }
+  }, [productData]);
+
   return (
     <div>
       <ProductSlider />
@@ -21,7 +30,7 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+            {featured.map((p) => <ProductCard key={p._id} product={p} />)}
           </div>
         </div>
       </section>

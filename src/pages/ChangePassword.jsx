@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../api/axios";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -13,29 +14,26 @@ const ChangePassword = () => {
   const requestOtp = async (e) => {
     e.preventDefault();
     setError("");
+    setMessage("");
     setLoading(true);
 
     try {
-      const res = await fetch(
-        "http://localhost:5000/auth/request-change-password-otp",
+      const response = await api.post(
+        "/auth/request-change-password-otp",
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentPassword,
-            newPassword,
-          }),
+          currentPassword,
+          newPassword,
         }
       );
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message);
-
-      setStep(2);
-      setMessage("OTP has been sent to your email.");
+      if (response.status) {
+        setStep(2);
+        setMessage("OTP has been sent to your email.");
+      } else {
+        setError(response.message || "Failed to request OTP");
+      }
     } catch (err) {
-      setError(err.message || "Failed to request OTP");
+      setError(err?.message || "Failed to request OTP");
     } finally {
       setLoading(false);
     }
@@ -48,25 +46,21 @@ const ChangePassword = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        "http://localhost:5000/auth/verify-change-password-otp",
+      const response = await api.post(
+        "/auth/verify-change-password-otp",
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            otp,
-          }),
+          otp,
         }
       );
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message);
-
-      setMessage("Your password has been changed successfully.");
-      setStep(3);
+      if (response.status) {
+        setMessage("Your password has been changed successfully.");
+        setStep(3);
+      } else {
+        setError(response.message || "Invalid OTP");
+      }
     } catch (err) {
-      setError(err.message || "Invalid OTP");
+      setError(err?.message || "Invalid OTP");
     } finally {
       setLoading(false);
     }

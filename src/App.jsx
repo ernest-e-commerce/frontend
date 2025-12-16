@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+// Import Outlet for nested routing
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
+import Preloader from "./components/Preloader";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -20,13 +22,30 @@ import ChangePassword from "./pages/ChangePassword";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./pages/AdminLogin"; 
+import AdminUsers from "./pages/AdminUsers"; 
+import { Toaster } from "sonner";
 
 const App = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Toaster richColors position="bottom-right" expand={true} />
       <Routes>
 
         {/* ================= ADMIN ROUTES ================= */}
@@ -35,6 +54,7 @@ const App = () => {
             <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="orders" element={<AdminOrders />} />
+            <Route path="users" element={<AdminUsers />} />
           </Route>
         </Route>
 

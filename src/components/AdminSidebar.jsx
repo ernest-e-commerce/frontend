@@ -1,8 +1,18 @@
 // src/components/AdminSidebar.jsx
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const AdminSidebar = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Redirect to home page after logout
+  };
+
   // Define navigation links
   const links = [
     { name: 'Dashboard', path: '/admin', icon: '📊' },
@@ -26,7 +36,7 @@ const AdminSidebar = () => {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-grow">
+      <nav className="grow">
         <ul className="space-y-2">
           {links.map((link) => (
             <li key={link.name}>
@@ -56,6 +66,13 @@ const AdminSidebar = () => {
           <span className="text-lg mr-3">🏠</span>
           Back to Store
         </NavLink>
+        <button
+          onClick={handleLogout}
+          className="w-full text-left flex items-center p-3 text-sm text-gray-600 hover:text-orange-500"
+        >
+          <LogOut size={20} className="mr-3" />
+          <span>Logout</span>
+        </button>
       </div>
       
     </div>
