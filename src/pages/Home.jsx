@@ -19,33 +19,23 @@ const Home = () => {
 
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900">
-      
       <ProductSlider />
-
-      {/* Trust Signals - Elevated Card Effect */}
       <div className="py-8 bg-white shadow-2xl rounded-xl -mt-12 relative z-10 max-w-7xl mx-auto px-6 md:px-10 border border-gray-100">
-        {/* Accent is now the deeper blue-800 */}
         <ValuePropsBanner className="text-blue-800" />
       </div>
-
       <section className="max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-20">
         <header className="mb-16 text-center">
             <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-800 tracking-tight">Explore Technology & Innovation</h2>
-            {/* Divider uses the deeper blue */}
             <div className="w-12 h-1 bg-blue-800 mx-auto my-4 rounded-full" />
             <p className="text-lg font-light text-gray-500 mt-3 max-w-3xl mx-auto">Discover advanced solutions and high-performance gear deployed by our team.</p>
         </header>
         <CategoriesGrid />
       </section>
-
-      {/* Deals Section - Clean, distinct container with cool, rounded edges */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-24">
-        {/* Background uses light blue variant for depth */}
         <div className="bg-blue-50 border border-blue-200 rounded-[2rem] p-8 md:p-16 shadow-inner">
             <DealsSection className="text-gray-900" />
         </div>
       </div>
-
       <section className="max-w-7xl mx-auto px-4 md:px-8 pt-20 pb-32">
         <header className="flex flex-col md:flex-row items-end justify-between mb-16">
           <div>
@@ -54,7 +44,6 @@ const Home = () => {
           </div>
           <a
             href="/products"
-            // CTA uses the brand's deep blue and updated shadow
             className="mt-8 md:mt-0 px-10 py-3.5 text-lg bg-blue-800 text-white font-semibold rounded-lg shadow-2xl shadow-blue-800/50 hover:bg-blue-900 transition duration-300 transform hover:scale-[1.01]"
           >
             Access Full Catalog →

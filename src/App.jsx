@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// Import Outlet for nested routing
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Preloader from "./components/Preloader";
 
@@ -31,10 +30,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 3000); // 3 seconds
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -47,8 +45,6 @@ const App = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Toaster richColors position="bottom-right" expand={true} />
       <Routes>
-
-        {/* ================= ADMIN ROUTES ================= */}
         <Route path="/admin" element={<AdminAuthWrapper />}>
           <Route element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
@@ -57,8 +53,6 @@ const App = () => {
             <Route path="users" element={<AdminUsers />} />
           </Route>
         </Route>
-
-        {/* ================= PUBLIC ROUTES ================= */}
         <Route
           element={
             <>
@@ -75,20 +69,13 @@ const App = () => {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-
-          {/* AUTH & PROFILE */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
-
-          {/* ADMIN LOGIN */}
           <Route path="/admin-login" element={<AdminLogin />} />
-
-          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Route>
-
       </Routes>
     </div>
   );

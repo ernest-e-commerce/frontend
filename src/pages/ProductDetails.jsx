@@ -51,7 +51,7 @@ const ProductDetails = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <Loader2 className="h-12 w-12 animate-spin text-orange-500" />
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -61,7 +61,7 @@ const ProductDetails = () => {
       <div className="text-center py-20">
         <h2 className="text-2xl font-bold text-red-600 mb-2">{error || "Product not found."}</h2>
         <p className="text-gray-600">We couldn't find the product you're looking for.</p>
-        <button onClick={() => navigate('/')} className="mt-6 px-6 py-2 bg-orange-500 text-white rounded-lg shadow hover:bg-orange-600">
+        <button onClick={() => navigate('/')} className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
           Go Home
         </button>
       </div>

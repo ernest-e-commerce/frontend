@@ -34,7 +34,7 @@ const AddToCart = ({ product, onAddToCart }) => {
       </div>
 
       <div className="flex gap-3">
-        <button onClick={handleAddToCart} className="flex-1 py-3 rounded-lg bg-linear-to-r from-orange-400 to-orange-500 text-white font-semibold shadow hover:shadow-md transform hover:scale-[1.01]">Add to Cart</button>
+        <button onClick={handleAddToCart} className="flex-1 py-3 rounded-lg bg-blue-600 text-white font-semibold shadow hover:shadow-md transform hover:scale-[1.01] hover:bg-blue-700">Add to Cart</button>
         <button onClick={() => navigate("/cart")} className="flex-1 py-3 rounded-lg border border-gray-200 text-gray-700">View Cart</button>
       </div>
 
