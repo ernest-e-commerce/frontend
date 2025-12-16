@@ -10,7 +10,7 @@ const AdminLayout = () => {
 
   // Simple Protection: Redirects non-admin users away from the dashboard
   if (!user || user.role !== 'admin') {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin-login" replace />;
   }
 
   return (

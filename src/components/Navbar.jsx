@@ -94,7 +94,7 @@ const SearchInputWithSuggestions = ({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)}
           placeholder={placeholder}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg 
+          className="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg
                      focus:outline-none focus:border-gray-600 transition"
         />
 
@@ -149,12 +149,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
 
           {/* BRAND */}
-          <Link
-            to="/"
-            className="text-2xl font-bold tracking-wide text-gray-900 
-                       hover:text-gray-700 transition"
-          >
-            MyStore
+          <Link to="/" className="flex items-center">
+            <img src="/logo.jpg" alt="Earnest Mall" className="h-16 w-auto" />
           </Link>
 
           {/* DESKTOP SEARCH */}
@@ -212,33 +208,17 @@ const Navbar = () => {
 
             {/* USER PROFILE / AUTH */}
             {user ? (
-              <div className="flex items-center gap-4">
-
-                {/* PROFILE LINK */}
+              <div className="flex items-center gap-3">
                 <Link
                   to="/profile"
-                  className="flex items-center gap-2 
-                             text-gray-700 hover:text-black transition"
+                  className="hidden sm:block text-gray-700 text-sm font-medium hover:text-black transition"
                 >
-                  <div
-                    className="w-9 h-9 flex items-center justify-center 
-                               rounded-full bg-gray-200 text-gray-800 
-                               font-bold uppercase"
-                  >
-                    {user.name?.charAt(0) || user.email.charAt(0)}
-                  </div>
-
-                  <span className="hidden sm:block text-sm font-medium">
-                    {user.name || user.email}
-                  </span>
+                  {user.name || user.email}
                 </Link>
-
-                {/* LOGOUT */}
                 <button
                   onClick={logout}
-                  className="px-3 py-1 bg-gray-100 
-                             border border-gray-300 text-gray-700 
-                             rounded-lg text-sm hover:bg-gray-200 transition"
+                  className="px-3 py-1 bg-gray-100 border border-gray-300
+                             text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition"
                 >
                   Logout
                 </button>

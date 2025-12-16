@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -13,8 +13,9 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile"; // ✅ NEW IMPORT
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import ChangePassword from "./pages/ChangePassword";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
@@ -22,6 +23,8 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminLogin from "./pages/AdminLogin";
 
 const App = () => {
+  const location = useLocation();
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Routes>
@@ -39,7 +42,7 @@ const App = () => {
         <Route
           element={
             <>
-              <Navbar />
+              {location.pathname !== "/admin-login" && <Navbar />}
               <main className="flex-1 min-h-screen">
                 <Outlet />
               </main>
@@ -56,7 +59,8 @@ const App = () => {
           {/* AUTH & PROFILE */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} /> {/* ✅ NEW ROUTE */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
 
           {/* ADMIN LOGIN */}
           <Route path="/admin-login" element={<AdminLogin />} />
