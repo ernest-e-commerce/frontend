@@ -90,12 +90,12 @@ const Products = () => {
           {/* PRODUCT GRID */}
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
             </div>
           ) : error ? (
             <p className="md:col-span-4 text-center text-red-500">{error}</p>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
               {filteredByQuery.map((p) => (
                 <ProductCard key={p._id} product={p} />
               ))}

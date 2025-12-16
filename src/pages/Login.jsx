@@ -35,7 +35,7 @@ const Login = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-lg">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
         <h2 className="text-3xl font-bold mb-1 text-center text-gray-800">Sign In</h2>
         <p className="text-center text-sm text-gray-500 mb-6">
           Sign in below, or use the quick access button for development.
@@ -50,7 +50,7 @@ const Login = () => {
               onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
               required
               placeholder="Enter your email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
           </div>
 
@@ -62,14 +62,14 @@ const Login = () => {
               onChange={(e) => setForm((s) => ({ ...s, password: e.target.value }))}
               required
               placeholder="Enter your password"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition disabled:bg-orange-300"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition shadow-lg shadow-blue-500/40 disabled:bg-blue-300"
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
@@ -80,7 +80,7 @@ const Login = () => {
           Don't have an account?{" "}
           <Link
             to="/register"
-            className="text-orange-500 font-medium hover:underline"
+            className="text-blue-600 font-medium hover:underline"
           >
             Create one
           </Link>

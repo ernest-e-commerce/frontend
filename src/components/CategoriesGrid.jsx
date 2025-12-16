@@ -13,7 +13,7 @@ const CategoriesGrid = () => {
             <Link
               key={cat.slug}
               to={`/products?category=${cat.slug}`}
-              className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow text-center"
+              className="bg-white rounded-xl p-4 shadow-xl hover:shadow-2xl transition-shadow text-center border border-gray-100"
             >
               <div className="text-3xl mb-2">{cat.icon}</div>
               <div className="text-sm font-medium">{cat.name}</div>

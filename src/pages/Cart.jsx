@@ -24,11 +24,11 @@ const Cart = () => {
         <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Shopping Cart</h2>
 
         {cart.length === 0 ? (
-          <div className="bg-white p-12 rounded-lg shadow-md text-center">
+          <div className="bg-white p-12 rounded-xl shadow-xl text-center border border-gray-100">
             <ShoppingBag className="mx-auto h-24 w-24 text-gray-300" />
             <h3 className="mt-6 text-xl font-semibold text-gray-700">Your cart is empty</h3>
             <p className="mt-2 text-gray-500">Looks like you haven't added anything to your cart yet.</p>
-            <Link to="/products" className="mt-6 inline-block px-8 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-orange-600 transition-colors">
+            <Link to="/products" className="mt-6 inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/40 hover:bg-blue-700 transition-colors">
               Start Shopping
             </Link>
           </div>
@@ -37,25 +37,25 @@ const Cart = () => {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => (
-                <div key={item._id} className="bg-white rounded-lg p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center shadow-sm hover:shadow-md transition-shadow">
+                <div key={item._id} className="bg-white rounded-xl p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center shadow-xl hover:shadow-2xl transition-shadow border border-gray-100">
                   <img src={item.image} alt={item.name} className="w-32 h-32 object-contain rounded-md bg-gray-50" />
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-800">{item.name}</h3>
-                    <p className="text-orange-500 font-semibold">₦{item.price?.toLocaleString()}</p>
+                    <p className="text-blue-600 font-semibold">₦{item.price?.toLocaleString()}</p>
 
                     <div className="mt-3 flex items-center gap-3">
                       <div className="text-sm text-gray-500">Quantity:</div>
                       <div className="flex items-center border rounded-md overflow-hidden">
                         <button
                           onClick={() => updateQty(item._id, Math.max(1, (item.qty || 1) - 1))}
-                          className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-1 text-gray-600 hover:bg-blue-50 transition-colors"
                         >
                           -
                         </button>
                         <div className="px-4 py-1 text-gray-800 font-medium">{item.qty}</div>
                         <button
                           onClick={() => updateQty(item._id, (item.qty || 1) + 1)}
-                          className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-1 text-gray-600 hover:bg-blue-50 transition-colors"
                         >
                           +
                         </button>
@@ -77,7 +77,7 @@ const Cart = () => {
 
             {/* Order Summary */}
             <aside className="lg:col-span-1 lg:sticky lg:top-24 h-fit">
-              <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-xl p-6 shadow-xl border border-gray-100">
                 <div className="flex items-center justify-between border-b pb-4">
                   <h4 className="font-semibold text-xl text-gray-800">Order Summary</h4>
                   <button onClick={clearCart} className="text-sm text-gray-500 hover:text-red-600 transition-colors">
@@ -104,13 +104,13 @@ const Cart = () => {
                 <div className="mt-6">
                   <button
                     onClick={handleCheckout}
-                    className="block w-full px-4 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-lg font-semibold shadow text-center hover:shadow-lg transition-shadow"
+                    className="block w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold shadow-lg shadow-blue-500/40 text-center hover:shadow-xl transition-shadow"
                   >
                     Proceed to Checkout
                   </button>
                 </div>
                 <div className="mt-4 text-center">
-                  <Link to="/products" className="text-sm text-orange-500 hover:underline">
+                  <Link to="/products" className="text-sm text-blue-600 hover:underline">
                     Continue Shopping
                   </Link>
                 </div>

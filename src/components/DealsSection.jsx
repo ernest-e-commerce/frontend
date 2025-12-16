@@ -59,7 +59,7 @@ const DealsSection = () => {
           <h2 className="text-2xl font-bold">Hot Deals</h2>
           <Link
             to="/products"
-            className="text-sm text-orange-500 hover:underline"
+            className="text-sm text-blue-600 hover:underline"
           >
             View all
           </Link>

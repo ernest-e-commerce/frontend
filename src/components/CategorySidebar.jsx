@@ -28,7 +28,7 @@ const CategorySidebar = ({ active = "all", onSelect = () => {} }) => {
               className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition 
                 ${
                   active === c.id
-                    ? "bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/40"
                     : "hover:bg-gray-100 text-gray-700"
                 }
               `}

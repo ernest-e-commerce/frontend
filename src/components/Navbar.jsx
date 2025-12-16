@@ -63,7 +63,7 @@ const SearchInputWithSuggestions = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 150)}
             placeholder={placeholder}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
           />
           <div className="absolute left-0 top-0 h-full flex items-center pl-4 text-gray-400">
             <Search className="w-5 h-5" />
@@ -72,11 +72,11 @@ const SearchInputWithSuggestions = ({
       </form>
 
       {isFocused && suggestions.length > 0 && (
-        <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-50">
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              className="p-3 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer transition"
+              className="p-3 text-sm text-gray-800 hover:bg-blue-50 cursor-pointer transition"
               onClick={() => handleSearchSubmit(null, suggestion)}
             >
               {suggestion}
@@ -108,7 +108,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-gray-200">
+    <nav className="bg-white shadow-xl sticky top-0 z-40 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="flex items-center">
@@ -122,7 +122,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              className="sm:hidden p-2 rounded-full text-gray-600 hover:bg-gray-100 transition"
+              className="sm:hidden p-2 rounded-full text-gray-600 hover:bg-blue-50 transition"
             >
               {isMobileSearchOpen ? (
                 <X className="w-6 h-6" />
@@ -140,7 +140,7 @@ const Navbar = () => {
 
             <Link
               to="/cart"
-              className="relative flex items-center text-gray-600 hover:text-black transition p-2 rounded-full hover:bg-gray-100"
+              className="relative flex items-center text-gray-600 hover:text-black transition p-2 rounded-full hover:bg-blue-50"
             >
               <ShoppingCart className="w-6 h-6" />
               {cart.length > 0 && (
@@ -157,9 +157,9 @@ const Navbar = () => {
                 <button
                   onClick={() => setProfileOpen((prev) => !prev)}
                   onBlur={() => setTimeout(() => setProfileOpen(false), 200)}
-                  className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition"
+                  className="flex items-center gap-2 p-1 rounded-full hover:bg-blue-50 transition"
                 >
-                  <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center overflow-hidden">
                     {user.avatar ? (
                       <img
                         src={user.avatar}
@@ -181,7 +181,7 @@ const Navbar = () => {
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-100">
+                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100">
                     <div className="px-4 py-3 border-b border-gray-200">
                       <p className="text-sm font-semibold text-gray-800">
                         {user.name || "Welcome"}
@@ -193,7 +193,7 @@ const Navbar = () => {
                  {isAdmin ? (
                       <Link
                         to="/admin"
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition"
                         onClick={() => setProfileOpen(false)}
                       >
                         <LayoutDashboard className="w-4 h-4" />
@@ -202,7 +202,7 @@ const Navbar = () => {
                     ) : (
                       <Link
                         to="/profile"
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition"
                         onClick={() => setProfileOpen(false)}
                       >
                         <User className="w-4 h-4" />
@@ -211,7 +211,7 @@ const Navbar = () => {
                     )}
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-3 w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-gray-100 transition"
+                      className="flex items-center gap-3 w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-blue-50 transition"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Logout</span>
@@ -222,8 +222,8 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-4 py-2 bg-gray-800 text-white rounded-lg font-semibold text-sm 
-                           shadow-md hover:bg-black transition-colors duration-300 flex items-center gap-2"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm
+                           shadow-lg shadow-blue-500/40 hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Sign In</span>

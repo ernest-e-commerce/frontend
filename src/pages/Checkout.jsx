@@ -124,7 +124,7 @@ const Checkout = () => {
           <PartyPopper className="w-20 h-20 mx-auto text-green-500 mb-6" />
           <h2 className="text-5xl font-bold text-gray-800 mb-4">Order Placed Successfully!</h2>
           <p className="text-lg text-gray-600 mb-8">Thank you for your purchase. We've received your order and will begin processing it shortly.</p>
-          <button onClick={() => navigate("/")} className="px-8 py-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition shadow-lg">
+          <button onClick={() => navigate("/")} className="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/40">
             Continue Shopping
           </button>
         </div>
@@ -138,7 +138,7 @@ const Checkout = () => {
         <div className="max-w-2xl mx-auto text-center p-12 bg-white rounded-2xl shadow-xl border border-gray-200">
           <h2 className="text-5xl font-bold text-gray-800 mb-4">Your Cart is Empty</h2>
           <p className="text-lg text-gray-600 mb-8">Looks like you haven't added anything to your cart yet. Start shopping to find something you love!</p>
-          <button onClick={() => navigate("/products")} className="px-8 py-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition shadow-lg">
+          <button onClick={() => navigate("/products")} className="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/40">
             Continue Shopping
           </button>
         </div>
@@ -147,7 +147,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 py-12 bg-gray-100 min-h-screen">
+    <div className="px-4 md:px-8 lg:px-16 py-12 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-serif font-bold text-gray-800 mb-10 text-center">Checkout</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -156,7 +156,7 @@ const Checkout = () => {
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="flex items-center justify-between p-6 cursor-pointer" onClick={() => setActiveStep("address")}>
                 <div className="flex items-center space-x-4">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${addressComplete ? "bg-green-500" : "bg-orange-500"} text-white font-bold text-lg`}>
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${addressComplete ? "bg-green-500" : "bg-blue-600"} text-white font-bold text-lg`}>
                     {addressComplete ? <CheckCircle size={24} /> : "1"}
                   </div>
                   <h2 className="text-2xl font-bold text-gray-800">Shipping Address</h2>
@@ -168,23 +168,23 @@ const Checkout = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                      <input type="text" name="name" required value={form.name} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="Enter your full name" />
+                      <input type="text" name="name" required value={form.name} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Enter your full name" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                      <input type="email" name="email" required value={form.email} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="Enter your email" />
+                      <input type="email" name="email" required value={form.email} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Enter your email" />
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Street Address</label>
-                      <input type="text" name="address" required value={form.address} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="Enter your street address" />
+                      <input type="text" name="address" required value={form.address} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Enter your street address" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
-                      <input type="text" name="city" required value={form.city} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="e.g. Lagos" />
+                      <input type="text" name="city" required value={form.city} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. Lagos" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
-                      <input type="text" name="state" required value={form.state} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="e.g. Lagos" />
+                      <input type="text" name="state" required value={form.state} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. Lagos" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Country</label>
@@ -192,10 +192,10 @@ const Checkout = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP Code</label>
-                      <input type="text" name="zip" required value={form.zip} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition" placeholder="e.g. 100001" />
+                      <input type="text" name="zip" required value={form.zip} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. 100001" />
                     </div>
                   </div>
-                  <button type="submit" disabled={loading} className="w-full mt-6 py-3 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition shadow-md disabled:bg-orange-300">
+                  <button type="submit" disabled={loading} className="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/40 disabled:bg-blue-300">
                     {loading ? "Saving..." : "Save & Continue"}
                   </button>
                 </form>
@@ -206,7 +206,7 @@ const Checkout = () => {
             <div className={`bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden ${!addressComplete && "opacity-50"}`}>
               <div className="flex items-center justify-between p-6 cursor-pointer" onClick={() => addressComplete && setActiveStep("payment")}>
                 <div className="flex items-center space-x-4">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${paymentComplete ? "bg-green-500" : activeStep === 'payment' ? "bg-orange-500" : "bg-gray-300"} text-white font-bold text-lg`}>
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${paymentComplete ? "bg-green-500" : activeStep === 'payment' ? "bg-blue-600" : "bg-gray-300"} text-white font-bold text-lg`}>
                     {paymentComplete ? <CheckCircle size={24} /> : "2"}
                   </div>
                   <h2 className="text-2xl font-bold text-gray-800">Payment Method</h2>
@@ -216,13 +216,13 @@ const Checkout = () => {
               {activeStep === "payment" && addressComplete && (
                 <div className="p-6 bg-gray-50 border-t border-gray-200">
                   <div className="space-y-4">
-                    <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-orange-50 transition">
-                      <input type="radio" name="paymentMethod" value="bank_transfer" checked={paymentMethod === "bank_transfer"} onChange={() => handlePaymentMethodChange("bank_transfer")} className="w-5 h-5 text-orange-600 focus:ring-orange-500" />
+                    <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition">
+                      <input type="radio" name="paymentMethod" value="bank_transfer" checked={paymentMethod === "bank_transfer"} onChange={() => handlePaymentMethodChange("bank_transfer")} className="w-5 h-5 text-blue-600 focus:ring-blue-500" />
                       <Landmark className="w-6 h-6 ml-4 text-gray-600" />
                       <span className="ml-3 text-lg font-medium text-gray-800">Bank Transfer</span>
                     </label>
-                    <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-orange-50 transition">
-                      <input type="radio" name="paymentMethod" value="pay_on_delivery" checked={paymentMethod === "pay_on_delivery"} onChange={() => handlePaymentMethodChange("pay_on_delivery")} className="w-5 h-5 text-orange-600 focus:ring-orange-500" />
+                    <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition">
+                      <input type="radio" name="paymentMethod" value="pay_on_delivery" checked={paymentMethod === "pay_on_delivery"} onChange={() => handlePaymentMethodChange("pay_on_delivery")} className="w-5 h-5 text-blue-600 focus:ring-blue-500" />
                       <Truck className="w-6 h-6 ml-4 text-gray-600" />
                       <span className="ml-3 text-lg font-medium text-gray-800">Pay on Delivery</span>
                     </label>
@@ -290,13 +290,13 @@ const Checkout = () => {
                 <div className="flex justify-between text-md"><span>Subtotal</span><span className="font-bold">{formatCurrency(subtotal)}</span></div>
                 <div className="flex justify-between text-md"><span>Shipping</span><span className="font-bold text-green-600">{shipping === 0 ? "FREE" : formatCurrency(shipping)}</span></div>
               </div>
-              <div className="mt-6 pt-6 border-t-2 border-orange-500">
+              <div className="mt-6 pt-6 border-t-2 border-blue-500">
                 <div className="flex justify-between text-2xl font-extrabold text-gray-800"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div>
               </div>
               <button
                 onClick={handlePlaceOrder}
                 disabled={!addressComplete || !paymentComplete || loading}
-                className="w-full mt-8 py-4 bg-linear-to-r from-orange-500 to-red-500 text-white font-bold text-xl rounded-xl shadow-lg hover:from-orange-600 hover:to-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full mt-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-xl rounded-xl shadow-lg shadow-blue-500/40 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Placing Order...' : 'Place Order'}
               </button>
