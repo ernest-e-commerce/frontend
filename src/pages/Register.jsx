@@ -105,7 +105,7 @@ const Register = () => {
                 email: form.email,
                 otp,
             });
-            const { token, user } = response.data; // Assuming response is { data: { token, user } }
+            const { token, user } = response
             login(user, token, "user");
             toast.success("Account verified successfully!");
             navigate("/");

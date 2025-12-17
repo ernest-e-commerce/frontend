@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { getCookie } from './cookies';
-import { toast } from 'sonner';
 
 export const backendUrl = () => {
+  let localhostUrl = "http://localhost:8000/mall";
   let remoteUrl = "https://love-meet.onrender.com/mall";
-
-  return remoteUrl;
+  
+  // Check if window is defined (client-side) before accessing location
+  const isLocalhost = typeof window !== 'undefined' && 
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  
+  const _api = isLocalhost ? localhostUrl : remoteUrl;
+  return _api;
 };
 
 const api = axios.create({
@@ -33,25 +38,16 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    // Show success toast if message exists
-    if (response.data?.message) {
-      toast.success(response.data.message);
-    }
     return response.data;
   },
   (error) => {
-    let errorMessage = 'An error occurred';
     if (error.response) {
       console.error('API Error:', error.response.data);
-      errorMessage = error.response.data?.message || error.response.data?.error || 'Server error';
     } else if (error.request) {
       console.error('Network Error:', error.request);
-      errorMessage = 'Network error - please check your connection';
     } else {
       console.error('Error:', error.message);
-      errorMessage = error.message;
     }
-    toast.error(errorMessage);
     return Promise.reject(error?.response?.data);
   }
 );
