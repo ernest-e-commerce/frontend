@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import { Package, Eye, X, ShoppingCart, User, MapPin } from 'lucide-react';
@@ -49,7 +49,7 @@ const OrderDetailModal = ({ orderId, onClose }) => {
         fetchOrder();
     }, [fetchOrder]);
 
-        const handleStatusUpdate = async () => {
+    const handleStatusUpdate = async () => {
         setUpdatingStatus(true);
         setUpdateError(null);
         try {
@@ -171,11 +171,35 @@ const OrderDetailModal = ({ orderId, onClose }) => {
     );
 };
 
+const TABS = ['All', 'Pending Payment', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+const OrderTabs = ({ currentStatus, onStatusChange, counts }) => (
+    <div className="border-b border-gray-200 mb-6">
+        <nav className="-mb-px flex space-x-6 overflow-x-auto">
+            {TABS.map(tab => (
+                <button
+                    key={tab}
+                    onClick={() => onStatusChange(tab)}
+                    className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors
+                        ${currentStatus === tab
+                            ? 'border-orange-500 text-orange-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        }`}
+                >
+                    {tab} <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${currentStatus === tab ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600'}`}>{counts[tab] || 0}</span>
+                </button>
+            ))}
+        </nav>
+    </div>
+);
+
+
 const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [currentStatus, setCurrentStatus] = useState('All');
 
     const selectedOrderId = searchParams.get('view_order');
 
@@ -207,6 +231,22 @@ const AdminOrders = () => {
         fetchOrders(); // Refetch orders to reflect any status changes
     };
 
+    const filteredOrders = useMemo(() => {
+        if (currentStatus === 'All') {
+            return orders;
+        }
+        return orders.filter(order => order.status === currentStatus);
+    }, [orders, currentStatus]);
+
+    const orderCounts = useMemo(() => {
+        const counts = { All: orders.length };
+        TABS.slice(1).forEach(status => {
+            counts[status] = orders.filter(order => order.status === status).length;
+        });
+        return counts;
+    }, [orders]);
+
+
     if (loading) {
         return <div className="text-center p-8">Loading orders...</div>;
     }
@@ -218,8 +258,10 @@ const AdminOrders = () => {
     return (
         <div>
             <h2 className="text-2xl font-semibold text-gray-700 mb-6">
-                Order Management ({orders.length} Total)
+                Order Management ({filteredOrders.length} {currentStatus !== 'All' ? currentStatus : ''} Orders)
             </h2>
+            
+            <OrderTabs currentStatus={currentStatus} onStatusChange={setCurrentStatus} counts={orderCounts} />
 
             <div className="overflow-x-auto bg-white rounded-lg shadow-md">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -234,7 +276,7 @@ const AdminOrders = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                        {orders.map((order) => (
+                        {filteredOrders.map((order) => (
                             <tr key={order._id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
                                     ...{order._id.slice(-8)}
@@ -266,10 +308,10 @@ const AdminOrders = () => {
                         ))}
                     </tbody>
                 </table>
-                {orders.length === 0 && (
+                {filteredOrders.length === 0 && (
                     <div className="text-center py-12 text-gray-500">
                         <Package className="mx-auto w-12 h-12 mb-4 text-gray-300" />
-                        <p>No orders found.</p>
+                        <p>No orders found for this status.</p>
                     </div>
                 )}
             </div>
