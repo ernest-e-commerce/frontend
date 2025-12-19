@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 const Profile = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'orders'
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -59,14 +60,13 @@ const Profile = () => {
               <p className="text-lg text-gray-900">{user.email}</p>
             </div>
 
-            {/* CHANGE PASSWORD LINK */}
             <div className="pt-4">
-              <Link
-                to="/change-password"
-                className="text-orange-500 font-medium hover:underline"
+              <button
+                onClick={() => navigate('/change-password')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Change Password
-              </Link>
+              </button>
             </div>
 
             <div className="pt-6 border-t border-gray-200">
