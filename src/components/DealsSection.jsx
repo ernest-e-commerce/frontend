@@ -4,74 +4,66 @@ import ProductCard from "./ProductCard";
 import api from "../api/axios";
 
 const DealsSection = () => {
-  const [deals, setDeals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [deals, setDeals] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchHotDeals = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get("/products/hot-deals");
-        setDeals(response || []);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch hot deals:", err);
-        setError("Could not load deals at this time.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchHotDeals = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get("/products/hot-deals");
+                setDeals(response || []);
+                setError(null);
+            } catch (err) {
+                console.error("Failed to fetch hot deals:", err);
+                setError("Could not load deals at this time.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    fetchHotDeals();
-  }, []);
+        fetchHotDeals();
+    }, []);
 
-  if (loading) {
+    if (loading) {
+        return (
+            <div className="text-center py-12">
+                <p className="text-gray-500">Loading hot deals...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-12">
+                <p className="text-red-500">{error}</p>
+            </div>
+        );
+    }
+
+    if (deals.length === 0) {
+        return null; // Don't render the section if there are no hot deals
+    }
+
     return (
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-          <h2 className="text-2xl font-bold mb-6">Hot Deals</h2>
-          <p>Loading deals...</p>
+        <div>
+            <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-gray-800">Today's Hot Deals</h2>
+                <Link
+                    to="/products"
+                    className="px-6 py-2 text-sm font-semibold text-blue-600 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors"
+                >
+                    View All
+                </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {deals.map((product) => (
+                    <ProductCard key={product._id} product={product} />
+                ))}
+            </div>
         </div>
-      </section>
     );
-  }
-
-  if (error) {
-    return (
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-          <h2 className="text-2xl font-bold mb-6">Hot Deals</h2>
-          <p className="text-red-500">{error}</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (deals.length === 0) {
-    return null; // Don't render the section if there are no hot deals
-  }
-
-  return (
-    <section className="py-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Hot Deals</h2>
-          <Link
-            to="/products"
-            className="text-sm text-blue-600 hover:underline"
-          >
-            View all
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {deals.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
 };
 
 export default DealsSection;
