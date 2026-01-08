@@ -5,7 +5,7 @@ export const backendUrl = () => {
   let localhostUrl = "http://localhost:8000/mall";
   let remoteUrl = "https://lm-server-93j0.onrender.com/mall";
   
-  // Check if window is defined (client-side) before accessing location
+  // Check if window is defined (client-side) before 
   const isLocalhost = typeof window !== 'undefined' && 
     (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
   
