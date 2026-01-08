@@ -296,7 +296,7 @@ const Checkout = () => {
               <button
                 onClick={handlePlaceOrder}
                 disabled={!addressComplete || !paymentComplete || loading}
-                className="w-full mt-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-xl rounded-xl shadow-lg shadow-blue-500/40 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full mt-8 py-4 bg-linear-to-r from-blue-500 to-blue-600 text-white font-bold text-xl rounded-xl shadow-lg shadow-blue-500/40 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Placing Order...' : 'Place Order'}
               </button>
