@@ -3,7 +3,7 @@ import { getCookie } from './cookies';
 
 export const backendUrl = () => {
   let localhostUrl = "http://localhost:8000/mall";
-  let remoteUrl = "https://lm-server-93j0.onrender.com/mall";
+  let remoteUrl = "https://earnest-mall-server.onrender.com/mall";
   
   // Check if window is defined (client-side) before 
   const isLocalhost = typeof window !== 'undefined' && 
