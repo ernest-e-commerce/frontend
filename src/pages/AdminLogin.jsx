@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import { setCookie } from '../api/cookies';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AdminLogin = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
@@ -48,14 +50,23 @@ const AdminLogin = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              autoComplete="current-password"
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
          <button
             type="submit"

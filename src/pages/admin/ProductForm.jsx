@@ -112,6 +112,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       // Pass back server response (product) to parent onSave
       onSave(responseData);
     } catch (error) {
+      console.log(error)
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(errorMessage);
     }
