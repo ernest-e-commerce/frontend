@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import api from "../api/axios";
 import { toast } from "sonner";
+import { supabase } from "../lib/supabase";
 
 const Login = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,18 +15,17 @@ const Login = () => {
     setLoading(true);
 
     const { email, password } = form;
-    try {
-      const response = await api.post("/auth/login", { email, password });
-      const { token, user } = response;
-      login(user, token, "user");
-      toast.success("Logged in successfully!");
-      navigate(from, { replace: true });
-    } catch (err) {
-      // Error toast is handled by axios interceptor
-      console.error(err);
-    } finally {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      toast.error(error.message || "Failed to sign in");
       setLoading(false);
+      return;
     }
+
+    toast.success("Logged in successfully!");
+    navigate(from, { replace: true });
+    setLoading(false);
   };
 
   return (
@@ -38,7 +35,7 @@ const Login = () => {
           Sign In
         </h2>
         <p className="text-center text-sm text-gray-500 mb-6">
-          Sign in below, or use the quick access button for development.
+          Welcome back. Sign in to your account.
         </p>
 
         <form onSubmit={submit} className="space-y-5">
@@ -49,9 +46,7 @@ const Login = () => {
             <input
               type="email"
               value={form.email}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, email: e.target.value }))
-              }
+              onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
               required
               placeholder="Enter your email"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
@@ -94,10 +89,7 @@ const Login = () => {
           </div>
           <div>
             Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="text-blue-600 font-medium hover:underline"
-            >
+            <Link to="/register" className="text-blue-600 font-medium hover:underline">
               Create one
             </Link>
           </div>

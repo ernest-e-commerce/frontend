@@ -7,9 +7,9 @@ const AdminSidebar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/admin-login');
   };
 
   const links = [

@@ -1,34 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useCart } from '../context/CartContext';
-import Modal from '../components/Modal';
-import api from "../api/axios";
-import ProductForm from './admin/ProductForm';
-import ProductList from './admin/ProductList';
-import Pagination from './admin/Pagination';
-import AdminHeader from './admin/AdminHeader';
+import React, { useState } from "react";
+import { useCart } from "../context/CartContext";
+import Modal from "../components/Modal";
+import { deleteProduct } from "../api/productService";
+import { toast } from "sonner";
+import ProductForm from "./admin/ProductForm";
+import ProductList from "./admin/ProductList";
+import Pagination from "./admin/Pagination";
+import AdminHeader from "./admin/AdminHeader";
 
 const AdminProducts = () => {
   const { products, fetchProducts, removeProductById, searchProducts } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  // useEffect(() => {
-  //   const handler = setTimeout(() => {
-  //     if (searchTerm) {
-  //       searchProducts(searchTerm, 1);
-  //     } else {
-  //       console.log(products?.products)
-  //       if (products?.products.length === 0) {
-  //           fetchProducts(1);
-  //       }
-  //     }
-  //   }, 500);
-
-  //   return () => {
-  //     clearTimeout(handler);
-  //   };
-  // }, [searchTerm]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleAddNew = () => {
     setEditingProduct(null);
@@ -41,13 +25,14 @@ const AdminProducts = () => {
   };
 
   const handleDelete = async (productId) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await api.delete(`/products/${productId}`);
-        removeProductById(productId);
-      } catch (error) {
-        console.error('Failed to delete product:', error);
-      }
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      await deleteProduct(productId);
+      removeProductById(productId);
+      toast.success("Product deleted");
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      toast.error(error.message || "Failed to delete product");
     }
   };
 
@@ -77,34 +62,31 @@ const AdminProducts = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <AdminHeader 
+      <AdminHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
         handleAddNew={handleAddNew}
       />
-      
-      <Modal 
-        isOpen={isModalOpen} 
+
+      <Modal
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingProduct ? 'Edit Product' : 'Add New Product'}
+        title={editingProduct ? "Edit Product" : "Add New Product"}
       >
-        <ProductForm 
+        <ProductForm
           product={editingProduct}
-          onSave={handleSave} 
-          onCancel={() => setIsModalOpen(false)} 
+          onSave={handleSave}
+          onCancel={() => setIsModalOpen(false)}
         />
       </Modal>
 
-      <ProductList 
+      <ProductList
         products={products?.products}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
 
-      <Pagination 
-        products={products}
-        handlePageChange={handlePageChange}
-      />
+      <Pagination products={products} handlePageChange={handlePageChange} />
     </div>
   );
 };

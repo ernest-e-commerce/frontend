@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import productsData from "../data/Products";
+import { searchProductsByName } from "../api/productService";
 import {
   ShoppingCart,
   Search,
@@ -26,14 +26,35 @@ const SearchInputWithSuggestions = ({
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
-  const suggestions = useMemo(() => {
-    if (query.length < 1) return [];
-    const lowerQuery = query.toLowerCase();
-    return productsData
-      .filter((p) => p.title.toLowerCase().startsWith(lowerQuery))
-      .map((p) => p.title)
-      .slice(0, 5);
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    let cancelled = false;
+    const handle = setTimeout(async () => {
+      try {
+        const { products } = await searchProductsByName({
+          query: trimmed,
+          page: 1,
+          limit: 5,
+        });
+        if (!cancelled) {
+          setSuggestions((products || []).map((p) => p.name));
+        }
+      } catch (_e) {
+        if (!cancelled) setSuggestions([]);
+      }
+    }, 200);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
   }, [query]);
 
   const handleSearchSubmit = useCallback(

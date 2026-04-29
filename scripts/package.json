@@ -1,0 +1,14 @@
+{
+  "name": "earnestmall-migration-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "migrate": "node migrate-from-mongodb.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.10.0",
+    "pg": "^8.13.1"
+  }
+}

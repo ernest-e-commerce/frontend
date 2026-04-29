@@ -1,42 +1,55 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import api from '../api/axios';
-import { setCookie } from '../api/cookies';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "../lib/supabase";
 
 const AdminLogin = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [error, setError] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
-    try {
-      const data = await api.post('/admin/login', { email, password });
-      login({ name: email, isAdmin: true }, data.token);
-      setCookie("adminToken", data.token);
-      navigate('/admin');
-    } catch (err) {
-      setError(err?.message || 'Invalid email or password.');
-      console.error(err);
-    } finally {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast.error(error.message || "Invalid email or password.");
       setLoading(false);
+      return;
     }
+
+    // Confirm the signed-in user actually has an admin role.
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (!profile || (profile.role !== "admin" && profile.role !== "super_admin")) {
+      await supabase.auth.signOut();
+      toast.error("This account is not an admin.");
+      setLoading(false);
+      return;
+    }
+
+    toast.success("Admin signed in.");
+    navigate("/admin");
+    setLoading(false);
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center text-gray-800">Admin Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-500 text-center">{error}</p>}
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -68,12 +81,12 @@ const AdminLogin = () => {
               </button>
             </div>
           </div>
-         <button
+          <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-150 cursor-pointer disabled:bg-indigo-400 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Log In'}
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
       </div>
