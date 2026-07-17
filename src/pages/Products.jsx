@@ -1,57 +1,99 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { getProductsByCategory } from "../api/productService";
+import {
+  fetchProductsPaginated,
+  searchProductsByName,
+  getProductsByCategory,
+} from "../api/productService";
 import ProductCard from "../components/ProductCard";
 import { ProductGridSkeleton } from "../components/ProductCardSkeleton";
 
+const PAGE_SIZE = 12;
+
 const Products = () => {
   const [searchParams] = useSearchParams();
-  const { products: productsFromContext, categories: productCategories } = useCart();
+  const { categories: productCategories } = useCart();
 
   const activeCat = searchParams.get("category") || "all";
   const urlQuery = searchParams.get("q") || "";
 
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  // (Re)load the first page whenever the category or search query changes.
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
       setIsLoading(true);
       setError(null);
+      setPage(1);
       try {
-        if (activeCat === "all") {
-          setDisplayedProducts(productsFromContext?.products || []);
-        } else {
+        let list = [];
+        let pages = 1;
+        if (activeCat !== "all") {
+          // Categories load in full (no pagination needed).
           const category = productCategories.find((c) => c.slug === activeCat);
-          if (category) {
-            const data = await getProductsByCategory(category.name);
-            setDisplayedProducts(data || []);
-          } else {
-            setDisplayedProducts([]);
-          }
+          list = category ? await getProductsByCategory(category.name) : [];
+        } else if (urlQuery.trim()) {
+          // Search the whole catalogue, paginated.
+          const res = await searchProductsByName({ query: urlQuery, page: 1, limit: PAGE_SIZE });
+          list = res.products || [];
+          pages = res.totalPages || 1;
+        } else {
+          // All products, paginated.
+          const res = await fetchProductsPaginated({ page: 1, limit: PAGE_SIZE });
+          list = res.products || [];
+          pages = res.totalPages || 1;
         }
+        if (cancelled) return;
+        setDisplayedProducts(list);
+        setTotalPages(pages);
       } catch (err) {
-        console.error(`Failed to load category ${activeCat}:`, err);
+        if (cancelled) return;
+        console.error(`Failed to load products (${activeCat}):`, err);
         setError("Failed to load products. Please try again later.");
         setDisplayedProducts([]);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
-
-    if (activeCat === "all" && (!productsFromContext || !productsFromContext.products)) return;
-    if (activeCat !== "all" && (!productCategories || productCategories.length === 0)) return;
-
     load();
-  }, [activeCat, productsFromContext, productCategories]);
+    return () => {
+      cancelled = true;
+    };
+  }, [activeCat, urlQuery, productCategories]);
 
-  const filteredByQuery = (displayedProducts || []).filter((p) => {
-    return urlQuery.trim() === ""
-      ? true
-      : p.name.toLowerCase().includes(urlQuery.toLowerCase());
-  });
+  const handleLoadMore = useCallback(async () => {
+    const next = page + 1;
+    setIsLoadingMore(true);
+    try {
+      const res = urlQuery.trim()
+        ? await searchProductsByName({ query: urlQuery, page: next, limit: PAGE_SIZE })
+        : await fetchProductsPaginated({ page: next, limit: PAGE_SIZE });
+      setDisplayedProducts((prev) => [...prev, ...(res.products || [])]);
+      setPage(next);
+      setTotalPages(res.totalPages || totalPages);
+    } catch (err) {
+      console.error("Failed to load more products:", err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [page, urlQuery, totalPages]);
+
+  // Category results are still filtered by the search box client-side.
+  const visibleProducts =
+    activeCat === "all"
+      ? displayedProducts
+      : displayedProducts.filter((p) =>
+          urlQuery.trim() === ""
+            ? true
+            : p.name.toLowerCase().includes(urlQuery.toLowerCase())
+        );
 
   const searchQueryDisplay =
     urlQuery.trim() !== "" ? `(Searching for: "${urlQuery}")` : "";
@@ -60,6 +102,8 @@ const Products = () => {
     activeCat === "all"
       ? "All Products"
       : productCategories.find((c) => c.slug === activeCat)?.name || "Products";
+
+  const canLoadMore = activeCat === "all" && !isLoading && page < totalPages;
 
   return (
     <div className="px-4 md:px-8 lg:px-16 py-10 bg-gray-50 min-h-screen">
@@ -73,7 +117,7 @@ const Products = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-sm text-gray-500">
-            Results: <span className="font-semibold text-gray-700">{filteredByQuery.length}</span>{" "}
+            Results: <span className="font-semibold text-gray-700">{visibleProducts.length}</span>{" "}
             {searchQueryDisplay}
           </span>
         </div>
@@ -85,16 +129,30 @@ const Products = () => {
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-            {filteredByQuery.map((p) => (
-              <ProductCard key={p._id} product={p} />
-            ))}
-            {filteredByQuery.length === 0 && (
-              <p className="col-span-full text-center text-gray-500">
-                No products found matching your criteria.
-              </p>
+          <>
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+              {visibleProducts.map((p) => (
+                <ProductCard key={p._id} product={p} />
+              ))}
+              {visibleProducts.length === 0 && (
+                <p className="col-span-full text-center text-gray-500">
+                  No products found matching your criteria.
+                </p>
+              )}
+            </div>
+
+            {canLoadMore && (
+              <div className="mt-10 flex justify-center">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white shadow-md transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isLoadingMore ? "Loading…" : "Load more products"}
+                </button>
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
