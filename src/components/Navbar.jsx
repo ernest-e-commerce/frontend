@@ -159,13 +159,6 @@ const Navbar = () => {
             </button>
 
             <Link
-              to="/products"
-              className="hidden sm:block text-gray-600 font-medium hover:text-black transition"
-            >
-              Products
-            </Link>
-
-            <Link
               to="/cart"
               className="relative flex items-center text-gray-600 hover:text-black transition p-2 rounded-full hover:bg-blue-50"
             >

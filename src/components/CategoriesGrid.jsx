@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { getCategoryImage } from "../lib/categoryIcons";
 
 const CategoriesGrid = () => {
   const { categories } = useCart();
@@ -9,16 +10,28 @@ const CategoriesGrid = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
         <h2 className="text-2xl font-bold mb-6">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {categories.map((cat) => (
-            <Link
-              key={cat.slug}
-              to={`/products?category=${cat.slug}`}
-              className="bg-white rounded-xl p-4 shadow-xl hover:shadow-2xl transition-shadow text-center border border-gray-100"
-            >
-              <div className="text-3xl mb-2">{cat.icon}</div>
-              <div className="text-sm font-medium">{cat.name}</div>
-            </Link>
-          ))}
+          {categories.map((cat) => {
+            const img = getCategoryImage(cat.name);
+            return (
+              <Link
+                key={cat.slug}
+                to={`/products?category=${cat.slug}`}
+                className="bg-white rounded-xl p-4 shadow-xl hover:shadow-2xl transition-shadow text-center border border-gray-100"
+              >
+                {img ? (
+                  <img
+                    src={img}
+                    alt=""
+                    aria-hidden="true"
+                    className="mx-auto mb-2 h-11 w-11 object-contain"
+                  />
+                ) : (
+                  <div className="text-3xl mb-2">{cat.icon}</div>
+                )}
+                <div className="text-sm font-medium">{cat.name}</div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

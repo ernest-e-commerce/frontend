@@ -1,26 +1,29 @@
-import React from 'react';
-import { Truck, RotateCcw, Headphones } from 'lucide-react';
+import React from "react";
+import { Truck, RotateCcw, Headphones } from "lucide-react";
+
+const props = [
+  { Icon: Truck, title: "Free Shipping", sub: "On all orders over $50" },
+  { Icon: RotateCcw, title: "Easy Returns", sub: "30-day money-back guarantee" },
+  { Icon: Headphones, title: "24/7 Support", sub: "Customer care when you need it" },
+];
 
 const ValuePropsBanner = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-        <div className="flex flex-col items-center">
-          <Truck className="text-4xl text-blue-600 mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900">Free Shipping</h3>
-          <p className="text-sm text-gray-500">On all orders over $50</p>
+    <div className="grid grid-cols-1 divide-y divide-gray-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      {props.map(({ Icon, title, sub }) => (
+        <div
+          key={title}
+          className="group flex items-center gap-4 px-6 py-3 sm:justify-center"
+        >
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-md shadow-blue-600/25 transition-transform duration-200 group-hover:scale-105">
+            <Icon className="h-6 w-6" strokeWidth={2} />
+          </span>
+          <div>
+            <h3 className="text-sm font-bold text-gray-900">{title}</h3>
+            <p className="text-xs text-gray-500">{sub}</p>
+          </div>
         </div>
-        <div className="flex flex-col items-center">
-          <RotateCcw className="text-4xl text-blue-600 mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900">Easy Returns</h3>
-          <p className="text-sm text-gray-500">30-day money back guarantee</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <Headphones className="text-4xl text-blue-600 mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900">24/7 Support</h3>
-          <p className="text-sm text-gray-500">Customer care when you need it</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

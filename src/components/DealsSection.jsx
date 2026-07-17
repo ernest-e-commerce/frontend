@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import { ProductGridSkeleton } from "./ProductCardSkeleton";
 import { getHotDeals } from "../api/productService";
 
 const DealsSection = () => {
@@ -27,8 +28,13 @@ const DealsSection = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">Loading hot deals...</p>
+      <div>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold text-gray-800">Today's Hot Deals</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <ProductGridSkeleton count={4} />
+        </div>
       </div>
     );
   }

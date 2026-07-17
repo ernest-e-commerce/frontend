@@ -17,8 +17,6 @@ export const productCategories = [
   { name: "Jewelry & Watches", slug: "jewelry-watches", icon: "💍" },
   { name: "Groceries", slug: "groceries", icon: "🛒" },
   { name: "Pet Supplies", slug: "pet-supplies", icon: "🐾" },
-  { name: "Office Products", slug: "office-products", icon: "📎" },
-  { name: "Musical Instruments", slug: "musical-instruments", icon: "🎸" },
 ];
 
 export const CartProvider = ({ children }) => {
@@ -37,14 +35,18 @@ export const CartProvider = ({ children }) => {
     currentPage: 1,
     totalProducts: 0,
   });
+  const [productsLoading, setProductsLoading] = useState(true);
 
   const fetchProducts = useCallback(async (page = 1, limit = 10) => {
+    setProductsLoading(true);
     try {
       const result = await fetchProductsPaginated({ page, limit });
       setProducts(result);
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setProducts({ products: [], totalPages: 1, currentPage: 1, totalProducts: 0 });
+    } finally {
+      setProductsLoading(false);
     }
   }, []);
 
@@ -54,12 +56,15 @@ export const CartProvider = ({ children }) => {
         fetchProducts(page, limit);
         return;
       }
+      setProductsLoading(true);
       try {
         const result = await searchProductsByName({ query: searchTerm, page, limit });
         setProducts(result);
       } catch (error) {
         console.error("Failed to search products:", error);
         setProducts({ products: [], totalPages: 1, currentPage: 1, totalProducts: 0 });
+      } finally {
+        setProductsLoading(false);
       }
     },
     [fetchProducts]
@@ -115,6 +120,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cart,
         products,
+        productsLoading,
         categories: productCategories,
         fetchProducts,
         searchProducts,
