@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductSlider from "../components/ProductSlider";
-import CategoriesGrid from "../components/CategoriesGrid";
 import CategorySidebar from "../components/CategorySidebar";
 import DealsSection from "../components/DealsSection";
 import ProductCard from "../components/ProductCard";
@@ -31,11 +30,10 @@ const Home = () => {
         <main className="min-h-screen bg-gray-50 text-gray-900">
             {/* Hero: categories (left) + slider (center) + ads (right) */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-[220px_minmax(0,1fr)_180px]">
+                <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[220px_minmax(0,1fr)_180px]">
                     <aside className="hidden md:block">
                         <CategorySidebar
                             variant="inline"
-                            fill
                             active="all"
                             onSelect={goToCategory}
                         />
@@ -62,12 +60,6 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Category grid — kept for mobile where the sidebar is hidden */}
-            <section className="py-8 md:hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <CategoriesGrid />
-                </div>
-            </section>
 
             <section className="bg-blue-50 py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

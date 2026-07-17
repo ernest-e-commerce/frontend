@@ -13,7 +13,9 @@ import {
   X,
   User,
   LayoutDashboard,
+  Menu,
 } from "lucide-react";
+import MobileCategoryMenu from "./MobileCategoryMenu";
 
 /* ============================================
    SEARCH WITH SUGGESTIONS
@@ -122,6 +124,7 @@ const Navbar = () => {
 
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
+  const [isCategoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
   const closeMobileSearch = useCallback(
     () => setIsMobileSearchOpen(false),
@@ -138,9 +141,18 @@ const Navbar = () => {
     <nav className="bg-white shadow-xl sticky top-0 z-40 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link to="/" className="flex items-center">
-            <img src="/logo.jpg" alt="Earnest Mall" className="h-14 w-auto" />
-          </Link>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCategoryMenuOpen(true)}
+              aria-label="Open categories menu"
+              className="sm:hidden -ml-2 rounded-full p-2 text-gray-600 hover:bg-blue-50 transition"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <Link to="/" className="flex items-center">
+              <img src="/logo.jpg" alt="Earnest Mall" className="h-14 w-auto" />
+            </Link>
+          </div>
 
           <div className="flex-1 max-w-xl mx-8 hidden sm:block">
             <SearchInputWithSuggestions placeholder="Search for products..." />
@@ -242,11 +254,10 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm
-                           shadow-lg shadow-blue-500/40 hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2"
+                className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/40 transition-colors duration-300 hover:bg-blue-700 sm:px-4 sm:py-2"
               >
-                <LogIn className="w-4 h-4" />
-                <span>Sign In</span>
+                <LogIn className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Sign In</span>
               </Link>
             )}
           </div>
@@ -262,6 +273,11 @@ const Navbar = () => {
           />
         </div>
       )}
+
+      <MobileCategoryMenu
+        open={isCategoryMenuOpen}
+        onClose={() => setCategoryMenuOpen(false)}
+      />
     </nav>
   );
 };
