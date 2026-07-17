@@ -36,6 +36,22 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
 }
 
+/* Clickable affordance — pointer on interactive elements (Tailwind v4 no
+   longer sets this on buttons), not-allowed when disabled. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+label[for],
+select,
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* CSS loader used by the Preloader — equalizer-style bars (no spinning circle) */
 @keyframes loader-bars {
   0%, 100% { transform: scaleY(0.35); opacity: 0.6; }

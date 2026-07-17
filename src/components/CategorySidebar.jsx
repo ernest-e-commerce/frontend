@@ -1,6 +1,5 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
-import { getCategoryImage } from "../lib/categoryIcons";
 
 const CategorySidebar = ({
   active = "all",
@@ -13,7 +12,7 @@ const CategorySidebar = ({
   const categories = productCategories.map((c) => ({
     id: c.slug,
     name: c.name,
-    icon: c.icon,
+    Icon: c.Icon,
   }));
 
   // "fixed" keeps the original Products-page behaviour; "inline" sits within a
@@ -28,37 +27,23 @@ const CategorySidebar = ({
   return (
     <aside className={layout}>
       <ul className={isInline ? "flex flex-1 flex-col" : "flex flex-col gap-1"}>
-        {categories.map((c) => {
-          const img = getCategoryImage(c.name);
-          return (
-            <li key={c.id} className={isInline ? "flex-1" : ""}>
-              <button
-                onClick={() => onSelect(c.id)}
-                className={`flex w-full items-center gap-3 border-l-[3px] px-3 text-left text-sm font-medium transition ${
-                  isInline ? "h-full" : "py-2"
-                } ${
-                  active === c.id
-                    ? "border-blue-600 font-semibold text-blue-600"
-                    : "border-transparent text-gray-700 hover:text-blue-600"
-                }`}
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-100">
-                  {img ? (
-                    <img
-                      src={img}
-                      alt=""
-                      aria-hidden="true"
-                      className="h-full w-full object-contain p-1"
-                    />
-                  ) : (
-                    <span className="text-base leading-none">{c.icon}</span>
-                  )}
-                </span>
-                <span className="truncate">{c.name}</span>
-              </button>
-            </li>
-          );
-        })}
+        {categories.map((c) => (
+          <li key={c.id} className={isInline ? "flex-1" : ""}>
+            <button
+              onClick={() => onSelect(c.id)}
+              className={`flex w-full items-center gap-3 border-l-[3px] px-3 text-left text-sm font-medium transition ${
+                isInline ? "h-full" : "py-2"
+              } ${
+                active === c.id
+                  ? "border-blue-600 font-semibold text-blue-600"
+                  : "border-transparent text-gray-700 hover:text-blue-600"
+              }`}
+            >
+              <c.Icon className="h-5 w-5 shrink-0" />
+              <span className="truncate">{c.name}</span>
+            </button>
+          </li>
+        ))}
       </ul>
     </aside>
   );

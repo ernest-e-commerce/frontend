@@ -3,20 +3,32 @@ import {
   fetchProductsPaginated,
   searchProductsByName,
 } from "../api/productService";
+import {
+  MdDevices,
+  MdCheckroom,
+  MdKitchen,
+  MdMenuBook,
+  MdSportsSoccer,
+  MdSpa,
+  MdSportsEsports,
+  MdWatch,
+  MdLocalGroceryStore,
+  MdPets,
+} from "react-icons/md";
 
 const CartContext = createContext();
 
 export const productCategories = [
-  { name: "Electronics", slug: "electronics", icon: "📱" },
-  { name: "Clothing", slug: "clothing", icon: "👕" },
-  { name: "Home & Kitchen", slug: "home-kitchen", icon: "🏠" },
-  { name: "Books", slug: "books", icon: "📚" },
-  { name: "Sports & Outdoors", slug: "sports-outdoors", icon: "⚽" },
-  { name: "Health & Beauty", slug: "health-beauty", icon: "💅" },
-  { name: "Toys & Games", slug: "toys-games", icon: "🎮" },
-  { name: "Jewelry & Watches", slug: "jewelry-watches", icon: "💍" },
-  { name: "Groceries", slug: "groceries", icon: "🛒" },
-  { name: "Pet Supplies", slug: "pet-supplies", icon: "🐾" },
+  { name: "Electronics", slug: "electronics", Icon: MdDevices },
+  { name: "Clothing", slug: "clothing", Icon: MdCheckroom },
+  { name: "Home & Kitchen", slug: "home-kitchen", Icon: MdKitchen },
+  { name: "Books", slug: "books", Icon: MdMenuBook },
+  { name: "Sports & Outdoors", slug: "sports-outdoors", Icon: MdSportsSoccer },
+  { name: "Health & Beauty", slug: "health-beauty", Icon: MdSpa },
+  { name: "Toys & Games", slug: "toys-games", Icon: MdSportsEsports },
+  { name: "Jewelry & Watches", slug: "jewelry-watches", Icon: MdWatch },
+  { name: "Groceries", slug: "groceries", Icon: MdLocalGroceryStore },
+  { name: "Pet Supplies", slug: "pet-supplies", Icon: MdPets },
 ];
 
 export const CartProvider = ({ children }) => {
