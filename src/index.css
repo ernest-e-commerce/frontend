@@ -1,6 +1,68 @@
 @import "tailwindcss";
 
+/* Remap Tailwind's blue palette to the Earnest Mall logo blue (#005fad),
+   so every `blue-*` utility across the site matches the brand. */
+@theme {
+  --color-blue-50: #e8f1fa;
+  --color-blue-100: #cfe3f4;
+  --color-blue-200: #9ec7ea;
+  --color-blue-300: #6dabe0;
+  --color-blue-400: #3c8fd6;
+  --color-blue-500: #1174bf;
+  --color-blue-600: #005fad;
+  --color-blue-700: #004d8c;
+  --color-blue-800: #003c6c;
+  --color-blue-900: #002a4b;
+
+  /* Type: Inter for body, Plus Jakarta Sans for headings */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui,
+    sans-serif;
+}
+
 :root{}
+
+/* Base typography upgrade */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* CSS loader used by the Preloader — equalizer-style bars (no spinning circle) */
+@keyframes loader-bars {
+  0%, 100% { transform: scaleY(0.35); opacity: 0.6; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+}
+
+.loader span {
+  display: block;
+  width: 8px;
+  height: 100%;
+  background: #005fad;
+  border-radius: 4px;
+  transform-origin: center;
+  animation: loader-bars 1s ease-in-out infinite;
+}
+
+.loader span:nth-child(2) { animation-delay: 0.12s; }
+.loader span:nth-child(3) { animation-delay: 0.24s; }
+.loader span:nth-child(4) { animation-delay: 0.36s; }
+.loader span:nth-child(5) { animation-delay: 0.48s; }
 
 @keyframes floatParticles {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -44,3 +106,71 @@
 .animate-logoGlow { animation: logoGlow 2s ease-in-out infinite; }
 .animate-scanLine { animation: scanLine 2s linear infinite; }
 .animate-scanLineVertical { animation: scanLineVertical 2s linear infinite; }
+
+/* ---------------------------------------------------------------
+   Hero slider (ProductSlider)
+   Content is hidden until its slide becomes the active one, so the
+   entrance replays on every autoplay cycle instead of firing once
+   on mount for all three slides at the same time.
+   --------------------------------------------------------------- */
+
+@keyframes heroTextIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroSubjectIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes heroGlowIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Slow drift on the background blobs so the panel is never fully static. */
+@keyframes heroDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+
+.hero-text,
+.hero-subject,
+.hero-glow {
+  opacity: 0;
+}
+
+.swiper-slide-active .hero-text {
+  animation: heroTextIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.swiper-slide-active .hero-subject {
+  animation: heroSubjectIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.swiper-slide-active .hero-glow {
+  animation: heroGlowIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-blob {
+  animation: heroDrift 14s ease-in-out infinite;
+}
+
+/* Fine dot grid — breaks up the flat gradient without reading as a pattern. */
+.hero-grid {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-text,
+  .hero-subject,
+  .hero-glow {
+    opacity: 1;
+  }
+  .swiper-slide-active .hero-text,
+  .swiper-slide-active .hero-subject,
+  .swiper-slide-active .hero-glow,
+  .hero-blob {
+    animation: none;
+  }
+}
